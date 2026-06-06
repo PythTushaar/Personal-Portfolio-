@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Tushaar Sapkota - Geomatics Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+  /* INDEX-SPECIFIC */
+  body { overflow-x: hidden; }
+
+  /* ── HERO ── */
+  #hero { min-height:100vh; display:flex; align-items:center; padding-top:80px; position:relative; }
+
+  .hero-inner { display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;width:100%; }
+
+  .hero-tag { display:inline-flex;align-items:center;gap:.6rem;background:rgba(0,212,170,0.04);border:1px solid rgba(0,212,170,0.18);border-radius:50px;padding:.42rem 1.1rem;font-size:.71rem;font-family:'Space Mono',monospace;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.75rem;position:relative;overflow:hidden; }
+  .hero-tag::before { content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(0,212,170,0.1),transparent);animation:shimmer 3.5s infinite; }
+  .htag-dot { width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0; }
+
+  .hero-name { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 0.8rem; }
+  .hero-name .ln1 { display:block;color:var(--text); }
+  .hero-name .ln2 { display:block;background:linear-gradient(135deg,var(--teal) 0%,var(--blue) 40%,var(--purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+
+  .hero-subtitle { font-family:'Space Mono',monospace;font-size:.85rem;color:var(--teal);margin-bottom:1.5rem;letter-spacing:.04em; }
+  .hero-desc { color:var(--dim);line-height:1.85;font-size:.93rem;margin-bottom:2.5rem;max-width:480px; }
+
+  .hero-actions { display:flex;gap:1rem;flex-wrap:wrap; }
+
+  /* ── PROFILE CARD ── */
+  .hero-profile-showcase {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .brutalist-wrapper {
+    position: relative;
+    padding: 10px;
+  }
+  .brutalist-bg-grid {
+    position: absolute;
+    inset: 0;
+    border: 1px dashed rgba(0, 212, 170, 0.25);
+    border-radius: 16px;
+    transform: translate(-12px, 12px);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .profile-card {
+    position: relative;
+    z-index: 2;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.2rem;
+    width: 340px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    transition: border-color .3s, transform .3s;
+  }
+  .profile-card:hover {
+    border-color: rgba(0, 212, 170, 0.25);
+    transform: translate(-4px, -4px);
+  }
+  .profile-card-image {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .profile-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+  .profile-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .meta-section {
+    display: flex;
+    flex-direction: column;
+  }
+  .meta-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .meta-value {
+    font-size: 0.78rem;
+    color: var(--dim);
+    margin-top: 0.15rem;
+  }
+
+  /* ── QUICK LINKS BAR ── */
+  #quick-links { position:relative;z-index:2;padding:2.5rem 0;border-top:1px solid rgba(0,212,170,0.07);border-bottom:1px solid rgba(0,212,170,0.07); }
+  .quick-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(0,212,170,0.07); }
+  .quick-item { background:var(--bg);padding:2rem 1.5rem;display:flex;flex-direction:column;gap:.5rem;text-decoration:none;transition:background .25s,transform .2s; }
+  .quick-item:hover { background:rgba(0,212,170,0.03);transform:translateY(-3px); }
+  .quick-item-icon { font-size:2rem;margin-bottom:.3rem; }
+  .quick-item-title { font-size:.88rem;font-weight:600;color:var(--text); }
+  .quick-item-sub { font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted);letter-spacing:.06em; }
+  .quick-item-arrow { font-size:.7rem;color:var(--teal);margin-top:auto;opacity:0;transition:opacity .2s,transform .2s; }
+  .quick-item:hover .quick-item-arrow { opacity:1;transform:translateX(4px); }
+
+  @media (max-width:900px) { .hero-inner{grid-template-columns:1fr; gap:2rem;} .hero-profile-showcase{order:-1;} .quick-grid{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:600px) { .quick-grid{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+<div class="bg-earth-container"><div id="earth"></div></div>
+<div class="c-dot" id="cdot"></div>
+<div class="c-ring" id="cring"></div>
+<div id="sprog"></div>
+<canvas id="bg-canvas"></canvas>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">TS<span style="opacity:.5">.</span>geo</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="skills.html">Skills</a></li>
+    <li><a href="education.html">Education</a></li>
+    <li><a href="experience.html">Experience</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="webgis.html">WebGIS</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-tag" style="border:none;background:transparent;padding:0;margin-bottom:1.5rem;font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--teal);letter-spacing:0.15em;text-transform:uppercase;display:flex;align-items:center;gap:0.5rem;"><span style="width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block;box-shadow:0 0 8px var(--teal);"></span>Geomatics Engineering · KU Dhulikhel</div>
+        <h1 class="hero-name">
+          <span class="ln1">Tushaar</span>
+          <span class="ln2">Sapkota</span>
+        </h1>
+        <p class="hero-subtitle">// GIS Analyst · Spatial Developer · Researcher</p>
+        <p class="hero-desc">Mapping Nepal from the mountains to the highway - GIS analysis, spatial modelling, and WebGIS development built on real fieldwork and a deep curiosity for the planet.</p>
+        <div class="hero-actions">
+          <a href="projects.html" class="btn btn-primary">View My Projects</a>
+          <a href="webgis.html" class="btn btn-outline">Open WebGIS Map</a>
+        </div>
+      </div>
+
+      <div class="hero-profile-showcase">
+        <div class="brutalist-wrapper">
+          <div class="brutalist-bg-grid"></div>
+          <div class="profile-card">
+            <div class="profile-card-image">
+              <img src="image.jpeg" alt="Tushaar Sapkota" />
+            </div>
+            <div class="profile-card-meta">
+              <div class="meta-section">
+                <div class="meta-label">Origin Coordinates</div>
+                <div class="meta-value">28°14′N · 83°40′E (Kushma, Nepal)</div>
+              </div>
+              <div class="meta-section">
+                <div class="meta-label">Field Station</div>
+                <div class="meta-value">27°37′N · 85°32′E (KU, Dhulikhel)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="quick-links">
+  <div class="container" style="padding:0">
+    <div class="quick-grid">
+      <a href="about.html" class="quick-item">
+        <div class="quick-item-icon">
+          <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </div>
+        <div class="quick-item-title">About Me</div>
+        <div class="quick-item-sub">Background & Bio</div>
+        <div class="quick-item-arrow">→ Read More</div>
+      </a>
+      <a href="projects.html" class="quick-item">
+        <div class="quick-item-icon">
+          <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </div>
+        <div class="quick-item-title">GIS Projects</div>
+        <div class="quick-item-sub">Solar EV · Land Admin AI</div>
+        <div class="quick-item-arrow">→ Explore Work</div>
+      </a>
+      <a href="webgis.html" class="quick-item">
+        <div class="quick-item-icon">
+          <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
+        </div>
+        <div class="quick-item-title">WebGIS Dashboard</div>
+        <div class="quick-item-sub">Nepal Tourism Choropleth</div>
+        <div class="quick-item-arrow">→ Open Map</div>
+      </a>
+      <a href="contact.html" class="quick-item">
+        <div class="quick-item-icon">
+          <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.58 16.14a6 6 0 0 1 6.84 0"></path><circle cx="12" cy="20" r="1"></circle></svg>
+        </div>
+        <div class="quick-item-title">Get In Touch</div>
+        <div class="quick-item-sub">Collaborate · Connect</div>
+        <div class="quick-item-arrow">→ Say Hello</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Tushaar Sapkota · <span>Geomatics Engineering</span> · Kathmandu University · 2025</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

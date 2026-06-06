@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Land Admin AI - Tushaar Sapkota</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+  .project-layout { display:grid;grid-template-columns:1fr 320px;gap:3.5rem;margin-top:3rem;align-items:start; }
+  .sidebar { position:sticky;top:110px; }
+  .sidebar-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1.25rem; }
+  .sidebar-label { font-family:'Space Mono',monospace;font-size:.62rem;color:var(--purple);text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid rgba(139,92,246,0.12); }
+  .sidebar-row { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.65rem;font-size:.82rem; }
+  .sidebar-key { color:var(--muted); }
+  .sidebar-val { color:var(--text);font-weight:500;text-align:right;font-size:.8rem; }
+
+  .section-prose { margin-bottom:2.5rem; }
+  .section-prose h2 { font-size:1.3rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem; }
+  .section-prose h2 .num { font-family:'Space Mono',monospace;font-size:.7rem;color:var(--purple);background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);border-radius:4px;padding:.15rem .45rem; }
+  .section-prose p { color:var(--dim);line-height:1.9;font-size:.92rem;margin-bottom:1rem; }
+  .section-prose p strong { color:var(--text); }
+
+  .module-grid { display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.25rem 0; }
+  .module-card { background:var(--bg2);border:1px solid rgba(139,92,246,0.14);border-radius:12px;padding:1.3rem; }
+  .module-card:hover { border-color:rgba(139,92,246,0.3);transform:translateY(-3px); }
+  .module-icon { font-size:1.8rem;margin-bottom:.65rem; }
+  .module-name { font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:.4rem; }
+  .module-desc { font-size:.78rem;color:var(--dim);line-height:1.6; }
+
+  .risk-table { width:100%;border-collapse:collapse;margin:1.25rem 0;font-size:.82rem; }
+  .risk-table th { font-family:'Space Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:.6rem .8rem;text-align:left;border-bottom:1px solid rgba(0,212,170,0.1); }
+  .risk-table td { padding:.7rem .8rem;color:var(--dim);border-bottom:1px solid rgba(255,255,255,0.03);vertical-align:top; }
+  .risk-table tr:hover td { background:rgba(255,255,255,0.01); }
+
+  .highlight-box { background:rgba(139,92,246,0.04);border:1px solid rgba(139,92,246,0.15);border-radius:12px;padding:1.25rem 1.5rem;margin:1.25rem 0; }
+  .highlight-box p { color:var(--dim);font-size:.875rem;line-height:1.82;margin:0; }
+  .highlight-box p strong { color:var(--purple); }
+
+  .keywords { display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0; }
+  .keyword { background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.18);border-radius:50px;padding:.25rem .75rem;font-size:.72rem;color:var(--purple);font-family:'Space Mono',monospace; }
+
+  @media(max-width:900px){.project-layout{grid-template-columns:1fr}.sidebar{position:static}.module-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="bg-earth-container"><div id="earth"></div></div>
+<div class="c-dot" id="cdot"></div><div class="c-ring" id="cring"></div>
+<div id="sprog"></div><canvas id="bg-canvas"></canvas>
+<div class="aurora-layer"><div class="aura a1"></div><div class="aura a2"></div><div class="aura a3"></div></div>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">TS<span style="opacity:.5">.</span>geo</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li><li><a href="skills.html">Skills</a></li>
+    <li><a href="education.html">Education</a></li><li><a href="experience.html">Experience</a></li>
+    <li><a href="projects.html">Projects</a></li><li><a href="webgis.html">WebGIS</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+  <div class="container">
+    <div class="page-hero reveal">
+      <div style="margin-bottom:1rem">
+        <a href="projects.html" style="font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);text-decoration:none" data-hover>← Back to Projects</a>
+      </div>
+      <div class="project-label label-ai" style="margin-bottom:1rem">AI Framework · LADM · Land Administration</div>
+      <h1 style="font-size:clamp(1.5rem,3vw,2.4rem);font-weight:700;line-height:1.15;letter-spacing:-.03em;max-width:820px">
+        Intelligent Land Registration for Nepal: A <span class="grad">Trustworthy AI Framework</span> for Faster, Accurate, and Inclusive Cadastre & Registry Services
+      </h1>
+      <div class="keywords" style="margin-top:1.25rem">
+        <span class="keyword">Land Registration</span><span class="keyword">Artificial Intelligence</span>
+        <span class="keyword">Cadastral Mapping</span><span class="keyword">Document AI</span>
+        <span class="keyword">LADM · ISO 19152</span><span class="keyword">Human-in-the-Loop</span>
+        <span class="keyword">Fit-for-Purpose</span>
+      </div>
+      <div style="display:flex;gap:1.5rem;margin-top:.5rem;flex-wrap:wrap">
+        <span style="font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted)">📅 Ongoing · 2025</span>
+        <span style="font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted)">🏛️ Kathmandu University · Geomatics Eng.</span>
+        <span style="font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted)">📄 Research Paper</span>
+      </div>
+    </div>
+
+    <div class="project-layout">
+      <div>
+
+        <!-- Abstract -->
+        <div class="section-prose reveal">
+          <h2><span class="num">01</span> Abstract</h2>
+          <div class="highlight-box">
+            <p>Land registration is a foundational public service linking people, parcels, and legally recognized rights. In Nepal, legacy paper archives, inconsistent document formats, and mismatches between cadastral maps and ground conditions increase transaction time and weaken land governance. This paper proposes a <strong>Nepal-relevant, modular AI framework</strong> aligned with fit-for-purpose land administration principles: affordability, participatory verification, incremental upgrading, and clear accountability. The framework integrates computer vision for boundary extraction, document AI for record processing, and anomaly detection for internal quality control - all within a <strong>human-in-the-loop</strong> design that preserves legal accountability.</p>
+          </div>
+        </div>
+
+        <!-- Problem -->
+        <div class="section-prose reveal">
+          <h2><span class="num">02</span> The Problem</h2>
+          <p>Nepal's land administration faces a <strong>classic tension between precision and coverage</strong>. Conventional cadastral approaches - high-accuracy surveys, intensive adjudication, engineered databases - require time and capacity difficult to sustain at national scale. Where coverage is incomplete, informal transactions increase, disputes persist, and the registry loses legitimacy.</p>
+          <p>The operational reality includes <strong>high service pressure at land revenue offices</strong>, legacy paper archives, inconsistent document formats across regions, and growing mismatches between cadastral maps and ground conditions in peri-urban areas. Post-disaster (earthquake, landslide), the demand for property documentation spikes precisely when the system is under stress.</p>
+        </div>
+
+        <!-- AI Framework Modules -->
+        <div class="section-prose reveal">
+          <h2><span class="num">03</span> AI Framework - Five Modules</h2>
+          <p>The framework organizes AI into <strong>five bounded modules</strong>, each solving a specific problem and producing outputs that can be validated independently. This modular approach reduces operational risk and simplifies adoption in government settings.</p>
+          <div class="module-grid">
+            <div class="module-card">
+              <div class="module-icon">🛰️</div>
+              <div class="module-name">Boundary Extraction</div>
+              <div class="module-desc">Mask R-CNN and fully convolutional networks applied to UAV/satellite imagery to generate candidate boundary lines. Outputs treated as candidate evidence, not legal boundaries.</div>
+            </div>
+            <div class="module-card">
+              <div class="module-icon">🗺️</div>
+              <div class="module-name">Cadastral Mismatch Detection</div>
+              <div class="module-desc">Candidate boundaries compared with existing cadastral geometry to detect overlaps, gaps, shifts. Supports prioritization of field verification resources in fast-changing peri-urban zones.</div>
+            </div>
+            <div class="module-card">
+              <div class="module-icon">📄</div>
+              <div class="module-name">Document Classification & Extraction</div>
+              <div class="module-desc">LayoutLM and Donut (OCR-free transformer) classify land records and extract structured fields - parcel IDs, party names, transaction types - from scanned archives, even with degraded scan quality.</div>
+            </div>
+            <div class="module-card">
+              <div class="module-icon">🔗</div>
+              <div class="module-name">Entity Resolution & Record Linkage</div>
+              <div class="module-desc">Probabilistic similarity scoring links records across spelling variants and transliteration differences. All accepted matches logged with audit trails and reversible correction procedures.</div>
+            </div>
+            <div class="module-card" style="grid-column:1/-1">
+              <div class="module-icon">🛡️</div>
+              <div class="module-name">Quality Assurance & Anomaly Detection</div>
+              <div class="module-desc">Topology checks (no overlaps/gaps), attribute validation, workflow completeness checks, and transaction log anomaly flags. Flags are risk indicators, not accusations - reviewed with due process.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LADM alignment -->
+        <div class="section-prose reveal">
+          <h2><span class="num">04</span> LADM Alignment & Data Framework</h2>
+          <p>The framework is conceptually grounded in the <strong>Land Administration Domain Model (LADM · ISO 19152)</strong> - the international standard for representing relationships between people, parcels, and rights. AI modules produce candidate evidence that can be inserted into LADM-aligned database fields <em>only after human verification</em>, preserving legal meaning.</p>
+          <p>Four categories of data materials are identified: <strong>spatial imagery</strong> (satellite, aerial, UAV orthophotos), <strong>cadastral and base-map layers</strong> (parcel polygons, control points, admin boundaries), <strong>documents</strong> (ownership certificates, deeds, mutation records), and <strong>transaction logs</strong> (mutation events, edit histories).</p>
+        </div>
+
+        <!-- Risk Table -->
+        <div class="section-prose reveal">
+          <h2><span class="num">05</span> Key Risks & Controls</h2>
+          <table class="risk-table">
+            <thead><tr><th>Risk</th><th>How it Appears</th><th>Control</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--text);font-weight:600">Boundary Invisibility</td><td>AI misses socially defined boundaries, produces misleading candidate lines</td><td>Participatory verification; treat outputs as candidates only</td></tr>
+              <tr><td style="color:var(--text);font-weight:600">Extraction Errors</td><td>Wrong party names or parcel IDs extracted; rework increases</td><td>Human confirmation gate; source region evidence; continuous monitoring</td></tr>
+              <tr><td style="color:var(--text);font-weight:600">Bias & Exclusion</td><td>Lower performance in informal settlements or minority language contexts</td><td>Diverse validation sets; fairness audits; complaint channels</td></tr>
+              <tr><td style="color:var(--text);font-weight:600">Privacy Breach</td><td>Unauthorized access to personal and property data</td><td>Role-based access; encryption; data minimization policy</td></tr>
+              <tr><td style="color:var(--text);font-weight:600">Automation Overreach</td><td>Staff accept AI outputs without review; legal harm embedded</td><td>Mandatory review gates; training; reversible correction procedures</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Nepal Context -->
+        <div class="section-prose reveal">
+          <h2><span class="num">06</span> Nepal-Specific Context</h2>
+          <p>Nepal's land administration operates in a <strong>mixed digital–paper environment</strong>. Centralized web-based transaction systems (LRIMS) already exist, providing integration points for AI as assistive services - without replacing legal decision-making. Documents exist in Nepali script and mixed languages, requiring training data and validation procedures aligned with local forms.</p>
+          <p>The recommended adoption sequence: <strong>1)</strong> Document AI for triage and indexing (lowest risk, highest return). <strong>2)</strong> Imagery-based mismatch detection in selected municipalities. <strong>3)</strong> Entity resolution and anomaly support as internal QA tools. All stages require mandatory verification gates and staff training.</p>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar reveal-right">
+        <div class="sidebar-card" style="border-color:rgba(139,92,246,0.2)">
+          <div class="sidebar-label">Project Info</div>
+          <div class="sidebar-row"><span class="sidebar-key">Status</span><span class="sidebar-val" style="color:var(--teal)">Ongoing · 2025</span></div>
+          <div class="sidebar-row"><span class="sidebar-key">Type</span><span class="sidebar-val">Research Paper</span></div>
+          <div class="sidebar-row"><span class="sidebar-key">Institution</span><span class="sidebar-val">KU · Geomatics</span></div>
+          <div class="sidebar-row"><span class="sidebar-key">Standard</span><span class="sidebar-val">LADM · ISO 19152</span></div>
+          <div class="sidebar-row"><span class="sidebar-key">Context</span><span class="sidebar-val">Nepal Land Governance</span></div>
+        </div>
+
+        <div class="sidebar-card" style="border-color:rgba(139,92,246,0.2)">
+          <div class="sidebar-label">AI Technologies</div>
+          <div style="display:flex;flex-wrap:wrap;gap:.35rem">
+            <span class="skill-tag">Mask R-CNN</span><span class="skill-tag">LayoutLM</span>
+            <span class="skill-tag">Donut (OCR-free)</span><span class="skill-tag">Deep Learning</span>
+            <span class="skill-tag">UAV Imagery</span><span class="skill-tag">Computer Vision</span>
+            <span class="skill-tag">NLP · OCR</span><span class="skill-tag">Anomaly Detection</span>
+          </div>
+        </div>
+
+        <div class="sidebar-card" style="border-color:rgba(139,92,246,0.2)">
+          <div class="sidebar-label">Framework Principles</div>
+          <ul style="list-style:none;padding:0;font-size:.8rem">
+            <li style="padding:.35rem 0;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--dim)">✓ Human-in-the-loop design</li>
+            <li style="padding:.35rem 0;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--dim)">✓ Fit-for-purpose alignment</li>
+            <li style="padding:.35rem 0;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--dim)">✓ Privacy-by-design</li>
+            <li style="padding:.35rem 0;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--dim)">✓ Auditability & contestability</li>
+            <li style="padding:.35rem 0;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--dim)">✓ Modular incremental adoption</li>
+            <li style="padding:.35rem 0;color:var(--dim)">✓ NIST AI RMF 1.0 aligned</li>
+          </ul>
+        </div>
+
+        <div class="sidebar-card" style="border-color:rgba(139,92,246,0.2)">
+          <div class="sidebar-label">Team</div>
+          <div style="display:flex;flex-direction:column;gap:.5rem">
+            <div style="background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:8px;padding:.65rem .8rem"><div style="font-size:.82rem;font-weight:600;color:var(--purple)">Tushaar Sapkota</div><div style="font-size:.65rem;font-family:'Space Mono',monospace;color:var(--muted)">(You)</div></div>
+            <div style="border-radius:8px;padding:.5rem .8rem;font-size:.8rem;color:var(--muted)">Rojina Basnet</div>
+            <div style="border-radius:8px;padding:.5rem .8rem;font-size:.8rem;color:var(--muted)">Gopal Khatri</div>
+            <div style="border-radius:8px;padding:.5rem .8rem;font-size:.8rem;color:var(--muted)">Aayusha Kuikel</div>
+            <div style="border-radius:8px;padding:.5rem .8rem;font-size:.8rem;color:var(--muted)">Jiban Khadka</div>
+          </div>
+        </div>
+
+        <a href="projects.html" class="btn btn-outline" style="width:100%;justify-content:center;margin-top:.5rem">← All Projects</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer><p>Tushaar Sapkota · <span>Geomatics Engineering</span> · Kathmandu University · 2025</p></footer>
+<script src="app.js"></script>
+</body>
+</html>

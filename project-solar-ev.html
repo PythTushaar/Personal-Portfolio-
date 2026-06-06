@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Solar EV Project - Tushaar Sapkota</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+  .project-hero { padding:5.5rem 0 3rem;border-bottom:1px solid rgba(0,212,170,0.08); }
+  .project-layout { display:grid;grid-template-columns:1fr 340px;gap:3.5rem;margin-top:3rem;align-items:start; }
+  .sidebar { position:sticky;top:110px; }
+  .sidebar-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1.25rem; }
+  .sidebar-label { font-family:'Space Mono',monospace;font-size:.62rem;color:var(--teal);text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid rgba(0,212,170,0.1); }
+  .sidebar-row { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.65rem;font-size:.82rem; }
+  .sidebar-key { color:var(--muted);min-width:90px; }
+  .sidebar-val { color:var(--text);font-weight:500;text-align:right; }
+  .sidebar-val.teal { color:var(--teal);font-family:'Space Mono',monospace; }
+
+  .section-prose { margin-bottom:2.5rem; }
+  .section-prose h2 { font-size:1.3rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem; }
+  .section-prose h2 .num { font-family:'Space Mono',monospace;font-size:.7rem;color:var(--teal);background:rgba(0,212,170,0.08);border:1px solid rgba(0,212,170,0.18);border-radius:4px;padding:.15rem .45rem; }
+  .section-prose p { color:var(--dim);line-height:1.9;font-size:.92rem;margin-bottom:1rem; }
+  .section-prose p strong { color:var(--text); }
+
+  .criteria-grid { display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.25rem 0; }
+  .criteria-card { background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem; }
+  .criteria-card:hover { border-color:rgba(0,212,170,0.24); }
+  .criteria-type { font-family:'Space Mono',monospace;font-size:.58rem;color:var(--purple);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem; }
+  .criteria-list { list-style:none;padding:0; }
+  .criteria-list li { font-size:.82rem;color:var(--dim);padding:.28rem 0;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;gap:.5rem; }
+  .criteria-list li::before { content:'▸';color:var(--teal);font-size:.65rem;flex-shrink:0; }
+  .criteria-list li:last-child { border-bottom:none; }
+
+  .weight-bar { margin-bottom:.75rem; }
+  .weight-label { display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.3rem; }
+  .weight-label span:first-child { color:var(--text); }
+  .weight-label span:last-child { font-family:'Space Mono',monospace;color:var(--teal); }
+  .weight-track { height:6px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden; }
+  .weight-fill { height:100%;border-radius:3px;background:linear-gradient(90deg,var(--teal),var(--purple)); }
+
+  .team-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem; }
+  .team-card { background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.9rem 1rem;font-size:.8rem; }
+  .team-name { color:var(--text);font-weight:600;margin-bottom:.2rem; }
+  .team-id { font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted); }
+  .team-self { border-color:rgba(0,212,170,0.28);background:rgba(0,212,170,0.04); }
+  .team-self .team-name { color:var(--teal); }
+
+  .highlight-box { background:rgba(0,212,170,0.04);border:1px solid rgba(0,212,170,0.15);border-radius:12px;padding:1.25rem 1.5rem;margin:1.25rem 0; }
+  .highlight-box p { color:var(--dim);font-size:.875rem;line-height:1.82;margin:0; }
+  .highlight-box p strong { color:var(--teal); }
+
+  .result-pill { display:inline-flex;align-items:center;gap:.4rem;background:rgba(0,212,170,0.06);border:1px solid rgba(0,212,170,0.18);border-radius:50px;padding:.35rem .9rem;font-size:.75rem;color:var(--teal);font-family:'Space Mono',monospace;margin:.2rem; }
+
+  @media(max-width:900px){.project-layout{grid-template-columns:1fr}.sidebar{position:static}.criteria-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="bg-earth-container"><div id="earth"></div></div>
+<div class="c-dot" id="cdot"></div><div class="c-ring" id="cring"></div>
+<div id="sprog"></div><canvas id="bg-canvas"></canvas>
+<div class="aurora-layer"><div class="aura a1"></div><div class="aura a2"></div><div class="aura a3"></div></div>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">TS<span style="opacity:.5">.</span>geo</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li><li><a href="skills.html">Skills</a></li>
+    <li><a href="education.html">Education</a></li><li><a href="experience.html">Experience</a></li>
+    <li><a href="projects.html">Projects</a></li><li><a href="webgis.html">WebGIS</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+  <div class="container">
+    <!-- Hero -->
+    <div class="project-hero reveal">
+      <div style="margin-bottom:1rem">
+        <a href="projects.html" style="font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:.4rem" data-hover>← Back to Projects</a>
+      </div>
+      <div class="project-label label-gis" style="margin-bottom:1rem">GIS · AHP · Multi-Criteria Decision Analysis</div>
+      <h1 style="font-size:clamp(1.6rem,3vw,2.6rem);font-weight:700;line-height:1.15;letter-spacing:-.03em;max-width:800px">
+        GIS-Based Optimum Site Selection for <span class="grad">Solar Electric Vehicle Charging Station:</span> BP Highway
+      </h1>
+      <div style="display:flex;gap:1.5rem;margin-top:1.25rem;flex-wrap:wrap">
+        <span style="font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted)">📅 July 6, 2025</span>
+        <span style="font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted)">🏛️ Kathmandu University</span>
+        <span style="font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted)">📍 BP Highway, Nepal</span>
+        <span style="font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted)">👥 5 Members</span>
+      </div>
+    </div>
+
+    <div class="project-layout">
+      <!-- Main Content -->
+      <div>
+
+        <!-- Abstract -->
+        <div class="section-prose reveal">
+          <h2><span class="num">01</span> Abstract</h2>
+          <div class="highlight-box">
+            <p>Solar-based renewable energy adoption is in its early stage in Nepal's power system. This study employs the <strong>Analytic Hierarchy Process (AHP)</strong>, a robust MCDM technique, to assess site suitability for solar-powered EV charging stations along <strong>BP Highway</strong> in Gandaki Province. Criteria including solar radiation, slope, aspect, LULC and elevation were used for solar panel suitability, while distance from highway, distance from existing charging stations, slope, soil bulk density and LULC were used for EV station selection. A weighted overlay analysis generated the final suitability map with <strong>CR = 0.058</strong>, and the final combined index was computed as <strong>0.5×Solar Panel + 0.5×EV Charging Station</strong>.</p>
+          </div>
+        </div>
+
+        <!-- Background -->
+        <div class="section-prose reveal">
+          <h2><span class="num">02</span> Background & Problem</h2>
+          <p>Nepal receives an average of <strong>300 days of sunshine annually</strong>, with solar irradiance of 4.5–5.5 kWh/m²/day. The BP Highway - connecting Dhulikhel to Bardibas over 158km - is Nepal's most economically active corridor. Yet EV adoption faces a structural problem: there is no systematic, data-driven framework to locate charging stations.</p>
+          <p>Traditional internal combustion vehicles have dense petrol pump networks. EV users face <strong>range anxiety</strong> because the charging infrastructure is underdeveloped and not spatially optimized. This study addresses that gap using GIS and MCDM to identify where solar-powered EV charging is both viable and accessible.</p>
+        </div>
+
+        <!-- Study Area -->
+        <div class="section-prose reveal">
+          <h2><span class="num">03</span> Study Area</h2>
+          <p>The BP Highway spans <strong>158km</strong> through Bagmati and Madhesh Province, centered around the Kavre, Sinduli, Ramechhap, and Motahari districts. A <strong>2km buffer</strong> around the highway was used as the analysis extent. The route exhibits diverse topography - from Mahabharat hill regions to fertile valleys - with solar irradiance levels between 4.5–5.5 kWh/m²/day throughout.</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:1rem">
+            <span class="result-pill">28°14′N · 85°32′E (avg)</span>
+            <span class="result-pill">158 km corridor</span>
+            <span class="result-pill">2km buffer zone</span>
+            <span class="result-pill">WGS 1984 UTM Zone 45N</span>
+          </div>
+        </div>
+
+        <!-- Criteria -->
+        <div class="section-prose reveal">
+          <h2><span class="num">04</span> Criteria & Reclassification</h2>
+          <p>Each criterion was independently reclassified into four suitability categories: <strong>Highly Suitable, Moderately Suitable, Low Suitable, Not Suitable</strong>. Two separate suitability analyses were run - one for Solar Panel placement and one for EV Charging Station siting.</p>
+          <div class="criteria-grid">
+            <div class="criteria-card">
+              <div class="criteria-type">☀️ Solar Power Plant Criteria</div>
+              <ul class="criteria-list">
+                <li>Solar Radiation (Wh/yr/m²) - ArcGIS Solar Tool</li>
+                <li>Slope (degrees) - derived from DEM (12.5m)</li>
+                <li>Aspect - south-facing highly suitable</li>
+                <li>Elevation (m) - 1504–1961m most suitable</li>
+                <li>LULC - bare ground & rangeland preferred</li>
+              </ul>
+            </div>
+            <div class="criteria-card">
+              <div class="criteria-type">⚡ EV Charging Station Criteria</div>
+              <ul class="criteria-list">
+                <li>Distance from Highway - 0–500m best</li>
+                <li>Distance from Existing Stations - &gt;5km best</li>
+                <li>Slope - 0–5° highly suitable</li>
+                <li>Soil Bulk Density (kg/m³) - 141–150 best</li>
+                <li>LULC - bare ground & rangeland</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- AHP Weights -->
+        <div class="section-prose reveal">
+          <h2><span class="num">05</span> AHP Weight Distribution</h2>
+          <p>Pairwise comparison matrices were constructed and validated with a <strong>Consistency Ratio (CR) of 0.058 for EV station</strong> and <strong>0.08 for Solar panel</strong> (both below the 0.1 threshold).</p>
+
+          <div style="margin-bottom:1.25rem">
+            <div style="font-family:'Space Mono',monospace;font-size:.65rem;color:var(--purple);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem">EV Charging Station Weights</div>
+            <div class="weight-bar"><div class="weight-label"><span>Distance from Highway</span><span>43%</span></div><div class="weight-track"><div class="weight-fill" style="width:43%"></div></div></div>
+            <div class="weight-bar"><div class="weight-label"><span>Existing Charging Station Proximity</span><span>23%</span></div><div class="weight-track"><div class="weight-fill" style="width:23%"></div></div></div>
+            <div class="weight-bar"><div class="weight-label"><span>Slope</span><span>17%</span></div><div class="weight-track"><div class="weight-fill" style="width:17%"></div></div></div>
+            <div class="weight-bar"><div class="weight-label"><span>LULC</span><span>11%</span></div><div class="weight-track"><div class="weight-fill" style="width:11%"></div></div></div>
+            <div class="weight-bar"><div class="weight-label"><span>Soil Bulk Density</span><span>6%</span></div><div class="weight-track"><div class="weight-fill" style="width:6%"></div></div></div>
+          </div>
+
+          <div>
+            <div style="font-family:'Space Mono',monospace;font-size:.65rem;color:var(--teal);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem">Solar Panel Weights</div>
+            <div class="weight-bar"><div class="weight-label"><span>Solar Irradiance</span><span>53%</span></div><div class="weight-track"><div class="weight-fill" style="width:53%"></div></div></div>
+            <div class="weight-bar"><div class="weight-label"><span>Slope</span><span>18%</span></div><div class="weight-track"><div class="weight-fill" style="width:18%"></div></div></div>
+            <div class="weight-bar"><div class="weight-label"><span>Aspect</span><span>13%</span></div><div class="weight-track"><div class="weight-fill" style="width:13%"></div></div></div>
+            <div class="weight-bar"><div class="weight-label"><span>LULC</span><span>11%</span></div><div class="weight-track"><div class="weight-fill" style="width:11%"></div></div></div>
+            <div class="weight-bar"><div class="weight-label"><span>Elevation</span><span>5%</span></div><div class="weight-track"><div class="weight-fill" style="width:5%"></div></div></div>
+          </div>
+        </div>
+
+        <!-- Data Sources -->
+        <div class="section-prose reveal">
+          <h2><span class="num">06</span> Data Sources</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+            <div class="criteria-card">
+              <div class="criteria-type">DEM</div>
+              <p style="font-size:.8rem;color:var(--dim);margin:0">ASF Data Search · 12.5m × 12.5m resolution</p>
+            </div>
+            <div class="criteria-card">
+              <div class="criteria-type">Solar Irradiance</div>
+              <p style="font-size:.8rem;color:var(--dim);margin:0">ArcGIS Solar Radiation Tool · Wh/yr/m²</p>
+            </div>
+            <div class="criteria-card">
+              <div class="criteria-type">LULC</div>
+              <p style="font-size:.8rem;color:var(--dim);margin:0">Sentinel · ArcGIS Living Atlas · 10m×10m</p>
+            </div>
+            <div class="criteria-card">
+              <div class="criteria-type">Soil Bulk Density</div>
+              <p style="font-size:.8rem;color:var(--dim);margin:0">ISRIC World Soil Information · kg/m³</p>
+            </div>
+            <div class="criteria-card">
+              <div class="criteria-type">Road Network</div>
+              <p style="font-size:.8rem;color:var(--dim);margin:0">Overpass Turbo (OpenStreetMap) · 158km total</p>
+            </div>
+            <div class="criteria-card">
+              <div class="criteria-type">Existing EV Stations</div>
+              <p style="font-size:.8rem;color:var(--dim);margin:0">Manual collection via web research → CSV → GIS</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div class="section-prose reveal">
+          <h2><span class="num">07</span> Results & Conclusion</h2>
+          <p>The final combined suitability index (<strong>0.5×Solar Panel + 0.5×EV Station</strong>) produced a comprehensive map of optimal sites. Field validation confirmed that highly suitable areas feature large open spaces with strong solar access, while unsuitable zones were predominantly dense built-up regions.</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:1rem">
+            <span class="result-pill">CR = 0.058 (EV)</span>
+            <span class="result-pill">CR = 0.08 (Solar)</span>
+            <span class="result-pill">4 Suitability Classes</span>
+            <span class="result-pill">Weighted Overlay Final Map</span>
+            <span class="result-pill">Field Validation Conducted</span>
+          </div>
+          <p style="margin-top:1.25rem">The study demonstrates that <strong>GIS + AHP</strong> can provide a reproducible, evidence-based framework for sustainable energy infrastructure siting - a methodology directly applicable to other highways across Nepal.</p>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar reveal-right">
+        <div class="sidebar-card">
+          <div class="sidebar-label">Project Info</div>
+          <div class="sidebar-row"><span class="sidebar-key">Submitted</span><span class="sidebar-val">July 6, 2025</span></div>
+          <div class="sidebar-row"><span class="sidebar-key">Institution</span><span class="sidebar-val">Kathmandu University</span></div>
+          <div class="sidebar-row"><span class="sidebar-key">Department</span><span class="sidebar-val">Geomatics Eng.</span></div>
+          <div class="sidebar-row"><span class="sidebar-key">Year Level</span><span class="sidebar-val">Third Year Project</span></div>
+          <div class="sidebar-row"><span class="sidebar-key">Study Area</span><span class="sidebar-val">BP Highway (158km)</span></div>
+          <div class="sidebar-row"><span class="sidebar-key">Province</span><span class="sidebar-val">Bagmati + Madhesh</span></div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="sidebar-label">Technical Stack</div>
+          <div style="display:flex;flex-wrap:wrap;gap:.35rem">
+            <span class="skill-tag">ArcGIS Pro</span><span class="skill-tag">AHP</span><span class="skill-tag">MCDM</span>
+            <span class="skill-tag">Weighted Overlay</span><span class="skill-tag">Raster Calculator</span>
+            <span class="skill-tag">Overpass Turbo</span><span class="skill-tag">Excel/CSV</span>
+            <span class="skill-tag">DEM Analysis</span><span class="skill-tag">Solar Radiation</span>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="sidebar-label">Key Metrics</div>
+          <div class="sidebar-row"><span class="sidebar-key">EV CR</span><span class="sidebar-val teal">0.058</span></div>
+          <div class="sidebar-row"><span class="sidebar-key">Solar CR</span><span class="sidebar-val teal">0.08</span></div>
+          <div class="sidebar-row"><span class="sidebar-key">Buffer</span><span class="sidebar-val teal">2km</span></div>
+          <div class="sidebar-row"><span class="sidebar-key">DEM Res.</span><span class="sidebar-val teal">12.5m</span></div>
+          <div class="sidebar-row"><span class="sidebar-key">LULC Res.</span><span class="sidebar-val teal">10m</span></div>
+          <div class="sidebar-row"><span class="sidebar-key">Final Index</span><span class="sidebar-val teal">0.5SP + 0.5EV</span></div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="sidebar-label">Team Members</div>
+          <div class="team-grid" style="grid-template-columns:1fr">
+            <div class="team-card team-self"><div class="team-name">Tushaar Sapkota</div><div class="team-id">31439 · (You)</div></div>
+            <div class="team-card"><div class="team-name">Rojina Basnet</div><div class="team-id">31399</div></div>
+            <div class="team-card"><div class="team-name">Gopal Khatri</div><div class="team-id">31419</div></div>
+            <div class="team-card"><div class="team-name">Aayusha Kuikel</div><div class="team-id">31423</div></div>
+            <div class="team-card"><div class="team-name">Jiban Khadka</div><div class="team-id">0290009-31</div></div>
+          </div>
+        </div>
+
+        <a href="projects.html" class="btn btn-outline" style="width:100%;justify-content:center;margin-top:.5rem">← All Projects</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer><p>Tushaar Sapkota · <span>Geomatics Engineering</span> · Kathmandu University · 2025</p></footer>
+<script src="app.js"></script>
+</body>
+</html>

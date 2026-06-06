@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Projects - Tushaar Sapkota</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+  .featured-grid { display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem; }
+  .project-card-featured {
+    background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);
+    overflow:hidden;transition:all .3s;position:relative;text-decoration:none;display:block;
+  }
+  .project-card-featured:hover { border-color:rgba(0,212,170,0.3);transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.12); }
+  .pcf-top { padding:2rem;position:relative;z-index:1; }
+  .pcf-emoji { font-size:3rem;margin-bottom:1rem;display:block; }
+  .pcf-title { font-family:'Playfair Display', serif; font-size:1.3rem;font-weight:700;margin-bottom:.5rem;line-height:1.3;color:var(--text); }
+  .pcf-org { font-family:'Space Mono',monospace;font-size:.65rem;color:var(--teal);letter-spacing:.08em;margin-bottom:1rem; }
+  .pcf-desc { color:var(--dim);font-size:.875rem;line-height:1.8;margin-bottom:1.25rem; }
+  .pcf-footer { padding:1.25rem 2rem;border-top:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1; }
+  .pcf-tags { display:flex;flex-wrap:wrap;gap:.35rem; }
+  .pcf-link { font-family:'Space Mono',monospace;font-size:.65rem;color:var(--teal);display:flex;align-items:center;gap:.35rem;transition:gap .2s; }
+  .pcf-link:hover { gap:.65rem; }
+
+  .project-card { background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.75rem;display:flex;flex-direction:column;gap:.8rem;transition:all .3s;position:relative;overflow:hidden;text-decoration:none; }
+  .project-card:hover { border-color:rgba(0,212,170,0.22);transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.12); }
+  .project-emoji { font-size:2rem; }
+  .project-title { font-family:'Playfair Display', serif; font-size:1.05rem;font-weight:700;line-height:1.3;color:var(--text); }
+  .project-desc { color:rgba(226,232,240,0.52);font-size:.82rem;line-height:1.6;flex:1; }
+  .project-tech { display:flex;flex-wrap:wrap;gap:.35rem; }
+
+  .projects-small-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:1.5rem; }
+
+  @media(max-width:900px){.featured-grid{grid-template-columns:1fr}.projects-small-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:600px){.projects-small-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="bg-earth-container"><div id="earth"></div></div>
+<div class="c-dot" id="cdot"></div><div class="c-ring" id="cring"></div>
+<div id="sprog"></div><canvas id="bg-canvas"></canvas>
+<div class="aurora-layer"><div class="aura a1"></div><div class="aura a2"></div><div class="aura a3"></div></div>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">TS<span style="opacity:.5">.</span>geo</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li><li><a href="skills.html">Skills</a></li>
+    <li><a href="education.html">Education</a></li><li><a href="experience.html">Experience</a></li>
+    <li><a href="projects.html">Projects</a></li><li><a href="webgis.html">WebGIS</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+  <div class="container">
+    <div class="page-hero reveal">
+      <div class="page-hero-tag">// Academic & Personal Work</div>
+      <h1 class="page-hero-title"><span class="grad">Projects</span> & Research</h1>
+      <p style="color:var(--muted);font-size:.9rem;margin-top:.75rem;font-family:'Space Mono',monospace">Real GIS problems · Real data · Real Nepal</p>
+    </div>
+
+    <!-- Featured Real Projects -->
+    <div class="section-tag reveal" style="margin-top:3rem">Featured Research Projects</div>
+    <div class="featured-grid">
+
+      <!-- Project 1: Solar EV -->
+      <a href="project-solar-ev.html" class="project-card-featured reveal">
+        <div class="pcf-banner"></div>
+        <div class="pcf-top">
+          <span class="pcf-emoji">
+            <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          </span>
+          <div class="project-label label-gis">GIS · AHP · MCDM</div>
+          <div class="pcf-title">GIS-Based Optimum Site Selection for Solar EV Charging Station: BP Highway</div>
+          <div class="pcf-org">Kathmandu University · Geomatics Engineering · July 2025</div>
+          <p class="pcf-desc">Applied AHP-based multi-criteria decision analysis to identify optimal locations for solar-powered electric vehicle charging stations along Nepal's 158km BP Highway corridor. Integrated DEM, LULC, solar radiation, slope, bulk density, and road proximity layers in ArcGIS with a consistency ratio of 0.058.</p>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem">
+            <span class="skill-tag">ArcGIS</span><span class="skill-tag">AHP</span><span class="skill-tag">Weighted Overlay</span><span class="skill-tag">LULC</span><span class="skill-tag">Solar Radiation</span><span class="skill-tag">DEM</span>
+          </div>
+          <div style="display:flex;gap:1rem;font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted)">
+            <span>Team: 5 members</span><span>·</span><span>Study area: 158km corridor</span><span>·</span><span>Gandaki Province</span>
+          </div>
+        </div>
+        <div class="pcf-footer">
+          <div class="pcf-tags">
+            <span class="project-label label-gis">Solar PV</span>
+            <span class="project-label label-gis">EV Infrastructure</span>
+            <span class="project-label label-design">Sustainable Energy</span>
+          </div>
+          <div class="pcf-link">View Details →</div>
+        </div>
+      </a>
+
+      <!-- Project 2: Land Admin AI -->
+      <a href="project-land-admin.html" class="project-card-featured reveal">
+        <div class="pcf-banner" style="background:linear-gradient(90deg,var(--purple),var(--pink),var(--blue));background-size:300% 100%;animation:bgflow 4s linear infinite;"></div>
+        <div class="pcf-top">
+          <span class="pcf-emoji">
+            <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M12 2L2 7h20L12 2z"></path><path d="M9 22V11M15 22V11"></path></svg>
+          </span>
+          <div class="project-label label-ai">AI · LADM · Document AI</div>
+          <div class="pcf-title">Intelligent Land Registration for Nepal: A Trustworthy AI Framework for Cadastre & Registry Services</div>
+          <div class="pcf-org">Kathmandu University · Geomatics Engineering · Ongoing 2025</div>
+          <p class="pcf-desc">Proposed a modular human-in-the-loop AI framework for Nepal's land registration system - integrating deep learning boundary detection, OCR-free document transformers, entity resolution, and anomaly detection aligned with LADM (ISO 19152) and fit-for-purpose land administration principles.</p>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem">
+            <span class="skill-tag">Deep Learning</span><span class="skill-tag">LayoutLM</span><span class="skill-tag">Donut</span><span class="skill-tag">LADM</span><span class="skill-tag">UAV Imagery</span><span class="skill-tag">OCR</span>
+          </div>
+          <div style="display:flex;gap:1rem;font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted)">
+            <span>Team: 5 researchers</span><span>·</span><span>Ongoing research paper</span><span>·</span><span>Nepal context</span>
+          </div>
+        </div>
+        <div class="pcf-footer">
+          <div class="pcf-tags">
+            <span class="project-label label-ai">Computer Vision</span>
+            <span class="project-label label-ai">Document AI</span>
+            <span class="project-label label-gis">Cadastral Mapping</span>
+          </div>
+          <div class="pcf-link">View Details →</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- WebGIS Project -->
+    <div class="section-tag reveal" style="margin-top:2.5rem">WebGIS & Mapping</div>
+    <div style="max-width:100%">
+      <a href="webgis.html" class="project-card-featured reveal" style="max-width:100%;display:block">
+        <div class="pcf-banner" style="background:linear-gradient(90deg,var(--teal),var(--blue));background-size:300% 100%;animation:bgflow 5s linear infinite;"></div>
+        <div class="pcf-top" style="display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start">
+          <span class="pcf-emoji" style="font-size:4rem">
+            <svg class="icon-svg icon-svg-lg" style="width: 56px; height: 56px;" viewBox="0 0 24 24"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
+          </span>
+          <div>
+            <div class="project-label label-web">Leaflet.js · GeoJSON · Choropleth</div>
+            <div class="pcf-title" style="font-size:1.1rem">Nepal Province Tourism Dashboard - Interactive WebGIS Choropleth</div>
+            <div class="pcf-org">Part B Assignment · Web GIS Development</div>
+            <p class="pcf-desc" style="margin-bottom:.75rem">Interactive choropleth map of Nepal's 7 provinces dynamically styled by annual tourist arrivals. Preprocessed GeoJSON (QGIS Simplify Geometries + Check Validity), CartoDB dark basemap, real-time hover info panel, and custom legend - all in Leaflet.js 1.9.4.</p>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+              <span class="skill-tag">Leaflet.js</span><span class="skill-tag">GeoJSON</span><span class="skill-tag">JavaScript</span><span class="skill-tag">QGIS</span><span class="skill-tag">CartoDB</span>
+            </div>
+          </div>
+        </div>
+        <div class="pcf-footer">
+          <div class="pcf-tags">
+            <span class="project-label label-web">Live Map</span>
+            <span class="project-label label-gis">Province Data</span>
+          </div>
+          <div class="pcf-link">Open Dashboard →</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Other Academic Work -->
+    <div class="section-tag reveal" style="margin-top:3rem">Other Academic Work</div>
+    <div class="projects-small-grid">
+      <div class="project-card reveal">
+        <div class="project-emoji">
+          <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </div>
+        <div class="project-label label-gis">Remote Sensing</div>
+        <div class="project-title">Land Cover Change Analysis - Gandaki Province</div>
+        <p class="project-desc">Google Earth Engine analysis of deforestation and urban growth using multispectral imagery, NDVI time-series and supervised classification.</p>
+        <div class="project-tech"><span class="tech-pill">GEE</span><span class="tech-pill">JavaScript</span><span class="tech-pill">NDVI</span><span class="tech-pill">Classification</span></div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-emoji">
+          <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24"><path d="M3 20h18L12 4z"></path></svg>
+        </div>
+        <div class="project-label label-gis">Terrain Analysis</div>
+        <div class="project-title">DEM-Based Flood Risk Zones - Gandaki Province</div>
+        <p class="project-desc">ArcGIS hydrological modelling using digital elevation models to identify flood accumulation zones and high-risk corridors.</p>
+        <div class="project-tech"><span class="tech-pill">ArcGIS</span><span class="tech-pill">DEM</span><span class="tech-pill">Fill & Flow</span><span class="tech-pill">Hydrology</span></div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-emoji">
+          <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        </div>
+        <div class="project-label label-gis">GPS Field Survey</div>
+        <div class="project-title">Campus Topographic Survey - KU Dhulikhel</div>
+        <p class="project-desc">Field GNSS survey of KU campus, processed into contour maps and elevation models for urban planning coursework.</p>
+        <div class="project-tech"><span class="tech-pill">GNSS</span><span class="tech-pill">QGIS</span><span class="tech-pill">Topography</span><span class="tech-pill">Contouring</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer><p>Tushaar Sapkota · <span>Geomatics Engineering</span> · Kathmandu University · 2025</p></footer>
+<script src="app.js"></script>
+</body>
+</html>

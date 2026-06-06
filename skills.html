@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Skills - Tushaar Sapkota</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+  .skills-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:2rem; }
+  .skill-category { background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:2rem;transition:all .3s;position:relative;overflow:hidden;cursor:none; }
+  .skill-category::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--purple),var(--pink),var(--teal));background-size:300% 100%;animation:bgflow 4s linear infinite;opacity:0;transition:opacity .3s; }
+  
+  @keyframes bgflow{0%{background-position:0%}100%{background-position:300%}}
+  .skill-category:hover::before,.skill-category:hover::after{opacity:1}
+  .skill-category:hover{border-color:rgba(0,212,170,0.22);transform:translateY(-6px) scale(1.01);box-shadow:0 28px 55px rgba(0,0,0,0.45)}
+  .skill-icon { font-size:2.4rem;margin-bottom:1rem;display:block; }
+  .skill-cat-title { font-size:.7rem;font-family:'Space Mono',monospace;color:var(--teal);text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem; }
+  .skill-tags { display:flex;flex-wrap:wrap;gap:.42rem; }
+
+  .proficiency-section { margin-top:3.5rem; }
+  .prof-grid { display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem; }
+  .prof-item { background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.3rem; }
+  .prof-name { font-size:.88rem;font-weight:600;margin-bottom:.6rem;display:flex;align-items:center;justify-content:space-between; }
+  .prof-level { font-family:'Space Mono',monospace;font-size:.62rem;color:var(--teal); }
+  .prof-bar { height:4px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden; }
+  .prof-fill { height:100%;border-radius:2px;background:linear-gradient(90deg,var(--teal),var(--purple));transition:width 1.2s ease; }
+
+  @media(max-width:900px){.skills-grid,.prof-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="bg-earth-container"><div id="earth"></div></div>
+<div class="c-dot" id="cdot"></div><div class="c-ring" id="cring"></div>
+<div id="sprog"></div><canvas id="bg-canvas"></canvas>
+<div class="aurora-layer"><div class="aura a1"></div><div class="aura a2"></div><div class="aura a3"></div></div>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">TS<span style="opacity:.5">.</span>geo</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li><li><a href="skills.html">Skills</a></li>
+    <li><a href="education.html">Education</a></li><li><a href="experience.html">Experience</a></li>
+    <li><a href="projects.html">Projects</a></li><li><a href="webgis.html">WebGIS</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+  <div class="container">
+    <div class="page-hero reveal">
+      <div class="page-hero-tag">// Tools, Technologies & Competencies</div>
+      <h1 class="page-hero-title"><span class="grad">Skills</span> & Expertise</h1>
+    </div>
+
+    <div class="skills-grid">
+      <div class="skill-category reveal">
+        <span class="skill-icon">
+          <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
+        </span>
+        <div class="skill-cat-title">GIS & Remote Sensing</div>
+        <div class="skill-tags">
+          <span class="skill-tag">ArcGIS Pro</span><span class="skill-tag">QGIS</span>
+          <span class="skill-tag">Google Earth Engine</span><span class="skill-tag">Leaflet.js</span>
+          <span class="skill-tag">Spatial Analysis</span><span class="skill-tag">Weighted Overlay</span>
+          <span class="skill-tag">AHP / MCDM</span><span class="skill-tag">Land Cover Classification</span>
+          <span class="skill-tag">DEM Analysis</span><span class="skill-tag">Choropleth Mapping</span>
+          <span class="skill-tag">NDVI</span><span class="skill-tag">Hydrological Modelling</span>
+        </div>
+      </div>
+      <div class="skill-category reveal">
+        <span class="skill-icon">
+          <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>
+        </span>
+        <div class="skill-cat-title">Web & WebGIS Development</div>
+        <div class="skill-tags">
+          <span class="skill-tag">HTML5</span><span class="skill-tag">CSS3</span>
+          <span class="skill-tag">JavaScript (ES6+)</span><span class="skill-tag">Three.js</span>
+          <span class="skill-tag">Leaflet.js</span><span class="skill-tag">GeoJSON</span>
+          <span class="skill-tag">WebGIS</span><span class="skill-tag">Canvas API</span>
+          <span class="skill-tag">Responsive Design</span>
+        </div>
+      </div>
+      <div class="skill-category reveal">
+        <span class="skill-icon">
+          <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+        </span>
+        <div class="skill-cat-title">Programming</div>
+        <div class="skill-tags">
+          <span class="skill-tag">JavaScript</span><span class="skill-tag">C</span>
+          <span class="skill-tag">C++</span><span class="skill-tag">Java</span>
+          <span class="skill-tag">Python (basics)</span><span class="skill-tag">GEE JavaScript API</span>
+          <span class="skill-tag">SQL (basics)</span>
+        </div>
+      </div>
+      <div class="skill-category reveal">
+        <span class="skill-icon">
+          <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </span>
+        <div class="skill-cat-title">Leadership & Soft Skills</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Teamwork</span><span class="skill-tag">Leadership</span>
+          <span class="skill-tag">Communication</span><span class="skill-tag">Time Management</span>
+          <span class="skill-tag">Event Organisation</span><span class="skill-tag">Attention to Detail</span>
+          <span class="skill-tag">Research Writing</span><span class="skill-tag">Positive Attitude</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proficiency-section">
+      <div class="section-tag reveal">Software Proficiency</div>
+      <div class="prof-grid">
+        <div class="prof-item reveal"><div class="prof-name">ArcGIS Pro<span class="prof-level">Advanced</span></div><div class="prof-bar"><div class="prof-fill" data-w="85" style="width:0%"></div></div></div>
+        <div class="prof-item reveal"><div class="prof-name">QGIS<span class="prof-level">Proficient</span></div><div class="prof-bar"><div class="prof-fill" data-w="80" style="width:0%"></div></div></div>
+        <div class="prof-item reveal"><div class="prof-name">Leaflet.js<span class="prof-level">Proficient</span></div><div class="prof-bar"><div class="prof-fill" data-w="75" style="width:0%"></div></div></div>
+        <div class="prof-item reveal"><div class="prof-name">Google Earth Engine<span class="prof-level">Intermediate</span></div><div class="prof-bar"><div class="prof-fill" data-w="65" style="width:0%"></div></div></div>
+        <div class="prof-item reveal"><div class="prof-name">JavaScript<span class="prof-level">Intermediate</span></div><div class="prof-bar"><div class="prof-fill" data-w="68" style="width:0%"></div></div></div>
+        <div class="prof-item reveal"><div class="prof-name">Python<span class="prof-level">Beginner</span></div><div class="prof-bar"><div class="prof-fill" data-w="40" style="width:0%"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer><p>Tushaar Sapkota · <span>Geomatics Engineering</span> · Kathmandu University · 2025</p></footer>
+<script src="app.js"></script>
+<script>
+// Animate bars on reveal
+const barObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      e.target.querySelectorAll('.prof-fill[data-w]').forEach(bar => {
+        setTimeout(()=>{bar.style.width=bar.dataset.w+'%';},200);
+      });
+    }
+  });
+},{threshold:.1});
+document.querySelectorAll('.prof-item').forEach(el=>barObs.observe(el));
+document.querySelectorAll('.skill-category').forEach(card=>{
+  card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();card.style.setProperty('--mx',(e.clientX-r.left)+'px');card.style.setProperty('--my',(e.clientY-r.top)+'px');});
+  const rx=((Math.random()-.5)*-12),ry=((Math.random()-.5)*12);
+  card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();const rx=((e.clientY-r.top)/r.height-.5)*-11;const ry=((e.clientX-r.left)/r.width-.5)*11;card.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-6px) scale(1.01)`;});
+  card.addEventListener('mouseleave',()=>{card.style.transform='';});
+});
+</script>
+</body>
+</html>

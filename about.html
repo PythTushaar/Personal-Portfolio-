@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>About - Tushaar Sapkota</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem;
+      align-items: start;
+      margin-top: 3rem;
+    }
+
+    .photo-col {
+      position: sticky;
+      top: 110px;
+    }
+
+    .photo-frame {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      position: relative;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .photo-frame::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: linear-gradient(to top, rgba(11, 15, 25, .7), transparent);
+      pointer-events: none;
+    }
+
+    .photo-badge {
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: .45rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      font-family: 'Space Mono', monospace;
+      font-size: .62rem;
+      color: var(--text);
+      white-space: nowrap;
+      z-index: 4;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, .5);
+      backdrop-filter: blur(12px);
+    }
+
+    .photo-wrapper {
+      position: relative;
+    }
+
+    .bio-text p {
+      color: var(--dim);
+      line-height: 1.95;
+      font-size: .95rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .bio-text p strong {
+      color: var(--text);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+      margin: 1.5rem 0;
+    }
+
+    .info-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+    }
+
+    .info-label {
+      font-family: 'Space Mono', monospace;
+      font-size: .6rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: .3rem;
+    }
+
+    .info-val {
+      font-size: .9rem;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .info-val a {
+      color: var(--teal);
+      text-decoration: none;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .8rem;
+      margin-top: 1.5rem;
+    }
+
+    .value-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem 1.1rem;
+      transition: all .3s;
+    }
+
+    .value-card:hover {
+      border-color: rgba(0, 212, 170, 0.24);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .value-icon {
+      font-size: 1.6rem;
+      margin-bottom: .5rem;
+    }
+
+    .value-name {
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: .25rem;
+    }
+
+    .value-desc {
+      font-size: .72rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    @media(max-width:900px) {
+      .about-grid {
+        grid-template-columns: 1fr
+      }
+
+      .photo-col {
+        position: static;
+        max-width: 340px;
+        margin: 0 auto
+      }
+
+      .info-grid,
+      .values-grid {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    @media(max-width:600px) {
+
+      .info-grid,
+      .values-grid {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-earth-container">
+    <div id="earth"></div>
+  </div>
+  <div class="c-dot" id="cdot"></div>
+  <div class="c-ring" id="cring"></div>
+  <div id="sprog"></div>
+  <canvas id="bg-canvas"></canvas>
+  <div class="aurora-layer">
+    <div class="aura a1"></div>
+    <div class="aura a2"></div>
+    <div class="aura a3"></div>
+  </div>
+
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">TS<span style="opacity:.5">.</span>geo</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="skills.html">Skills</a></li>
+      <li><a href="education.html">Education</a></li>
+      <li><a href="experience.html">Experience</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="webgis.html">WebGIS</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="container">
+      <div class="page-hero reveal">
+        <div class="page-hero-tag">// Who I Am</div>
+        <h1 class="page-hero-title">About <span class="grad">Tushaar Sapkota</span></h1>
+      </div>
+
+      <div class="about-grid">
+        <!-- Photo -->
+        <div class="photo-col reveal-left">
+          <div class="photo-wrapper">
+            <div class="photo-corner-tl"></div>
+            <div class="photo-corner-br"></div>
+            <div class="photo-frame">
+              <img src="image.jpeg" alt="Tushaar Sapkota" />
+            </div>
+            <div class="photo-badge">Administrator · Nepgeom'26</div>
+          </div>
+
+          <div class="stat-grid" style="margin-top:2.5rem">
+            <div class="stat-card">
+              <div class="stat-num">KU</div>
+              <div class="stat-label">Kathmandu University · Geomatics Eng.</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">4th</div>
+              <div class="stat-label">Year Undergraduate · Batch 2022</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">2</div>
+              <div class="stat-label">Worked on Research Projects</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" style="font-size: 1.15rem;">Administrator</div>
+              <div class="stat-label">Nepgeom'26</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bio -->
+        <div class="reveal">
+          <div class="section-tag">Background</div>
+          <h2 class="section-title" style="margin-bottom:1.5rem">From Kushma to the <span class="grad">Coordinate
+              Grid</span></h2>
+
+          <div class="bio-text">
+            <p>I'm <strong>Tushaar Sapkota</strong>, a third-year Geomatics Engineering undergraduate at Kathmandu
+              University, Dhulikhel. I grew up in Kushma, Parbat - a small hill town in western Nepal - where the
+              terrain itself probably sparked my interest in spatial thinking long before I knew what GIS stood for.</p>
+            <p>My work sits at the intersection of <strong>geographic information systems, spatial analysis, and
+                web-based mapping</strong>. I've applied AHP-based multi-criteria decision analysis to real
+              infrastructure problems along BP Highway, and I have currently worked as a lead of Nepgeom'26 setting up
+              the benchmark of largest departmental event with maximum number of audiences till the date.</p>
+            <p>Outside the technical side, I've held leadership positions that shaped how I work with people.As
+              <strong>Administrator of Nepgeom'26 </strong>, We sucessfully marked the benchmark for the largest
+              audience in any departmental events over 4000+ audiences at Acoustic night.
+              <strong>Vice President of the KMC Literature Club</strong>, I ran events and built collaboration across
+              the club. As <strong>Sergeant of Arms at KU LPD</strong>, I learned structured responsibility under
+              organizational hierarchy. Both pushed me to communicate clearly and stay calm under pressure.
+            </p>
+            <p>I believe maps are political as much as they are technical - who gets represented, whose land is
+              recorded, and whose data is missing are questions I take seriously in my GIS work.</p>
+          </div>
+
+          <div class="page-divider"></div>
+
+          <div class="section-tag">Personal Details</div>
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label">Full Name</div>
+              <div class="info-val">Tushaar Sapkota</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Location</div>
+              <div class="info-val">Kushma, Parbat · Nepal</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Email</div>
+              <div class="info-val"><a href="mailto:tusharsapkota16@gmail.com">tusharsapkota16@gmail.com</a></div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Phone</div>
+              <div class="info-val"><a href="tel:9860590329">+977 9860590329</a></div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">University</div>
+              <div class="info-val">Kathmandu University (KU)</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Department</div>
+              <div class="info-val">Geomatics Engineering</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Coordinates</div>
+              <div class="info-val" style="font-family:'Space Mono',monospace;font-size:.8rem">28°14′N 83°40′E</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Year</div>
+              <div class="info-val">3rd Year · 2025</div>
+            </div>
+            <div class="info-item"
+              style="grid-column: 1 / -1; border-color: rgba(0, 212, 170, 0.25); background: rgba(0, 212, 170, 0.02);">
+              <div class="info-label" style="color: var(--teal);">Key Leadership Role</div>
+              <div class="info-val" style="font-weight: 700; color: var(--text);">Administrator - Nepgeom'26 (National
+                Geomatics Exhibition)</div>
+            </div>
+          </div>
+
+          <div class="page-divider"></div>
+
+          <div class="section-tag">What Drives Me</div>
+          <div class="values-grid">
+            <div class="value-card" data-hover>
+              <div class="value-icon">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                  </path>
+                  <path d="M2 12h20"></path>
+                </svg>
+              </div>
+              <div class="value-name">Spatial Justice</div>
+              <div class="value-desc">Making sure land and resource mapping serves everyone - not just those who are
+                already mapped.</div>
+            </div>
+            <div class="value-card" data-hover>
+              <div class="value-icon">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                  <path d="M4.5 16.5c-1.5 1.26-2.5 3.19-2.5 5.5h20c0-2.31-1-4.24-2.5-5.5"></path>
+                  <path d="M12 2v14.5"></path>
+                  <circle cx="12" cy="5" r="3"></circle>
+                </svg>
+              </div>
+              <div class="value-name">Evidence-Based Work</div>
+              <div class="value-desc">From AHP weights to raster calculators - I trust the data, but I interrogate my
+                methods.</div>
+            </div>
+            <div class="value-card" data-hover>
+              <div class="value-icon">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <div class="value-name">Team Mindset</div>
+              <div class="value-desc">Every project I've done has been collaborative. Good spatial outputs need good
+                human coordination.</div>
+            </div>
+            <div class="value-card" data-hover>
+              <div class="value-icon">
+                <svg class="icon-svg" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="2"></circle>
+                  <path
+                    d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14" />
+                </svg>
+              </div>
+              <div class="value-name">Open Technology</div>
+              <div class="value-desc">QGIS, Leaflet.js, GEE - I build with accessible tools that others can reproduce
+                and extend.</div>
+            </div>
+          </div>
+
+          <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap">
+            <a href="projects.html" class="btn btn-primary">See My Projects</a>
+            <a href="contact.html" class="btn btn-outline">Get In Touch</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Tushaar Sapkota · <span>Geomatics Engineering</span> · Kathmandu University · 2026</p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+
+</html>

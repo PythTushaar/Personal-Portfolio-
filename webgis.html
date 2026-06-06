@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>WebGIS Dashboard - Tushaar Sapkota</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+  .webgis-wrapper { position:relative;border-radius:20px;overflow:hidden;border:1px solid rgba(0,212,170,0.14);box-shadow:0 45px 90px rgba(0,0,0,0.55),0 0 0 1px rgba(0,212,170,0.04);background:var(--bg2); }
+  #leaflet-map { height:560px;width:100%; }
+  .leaflet-control-attribution{background:rgba(3,7,18,0.8)!important;color:rgba(71,85,105,0.7)!important;font-size:.58rem!important}
+  .leaflet-control-attribution a{color:var(--teal)!important}
+  .leaflet-control-zoom a{background:rgba(7,16,31,0.95)!important;color:var(--teal)!important;border-color:rgba(0,212,170,0.18)!important}
+  .leaflet-control-zoom a:hover{background:rgba(0,212,170,0.1)!important}
+
+  .map-overlay{position:absolute;top:1rem;right:1rem;z-index:1000;pointer-events:none}
+  .map-info-panel{background:rgba(7,16,31,0.96);border:1px solid rgba(0,212,170,0.22);border-radius:14px;padding:1rem 1.25rem;min-width:235px;max-width:268px;backdrop-filter:blur(18px);box-shadow:0 8px 36px rgba(0,0,0,0.65)}
+  .info-panel-header{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--teal);text-transform:uppercase;letter-spacing:.14em;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid rgba(0,212,170,0.12);display:flex;align-items:center;gap:.5rem}
+  .info-panel-header::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal);animation:blink 1.4s ease infinite}
+  .info-province-name{font-size:1rem;font-weight:700;margin-bottom:.6rem;background:linear-gradient(135deg,var(--text),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .info-row{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;margin-bottom:.3rem;color:rgba(226,232,240,0.52)}
+  .info-val{color:var(--teal);font-family:'Space Mono',monospace;font-size:.72rem;font-weight:700}
+  .info-attraction{margin-top:.65rem;font-size:.69rem;color:rgba(226,232,240,0.36);line-height:1.45;border-top:1px solid rgba(0,212,170,0.08);padding-top:.55rem}
+  .info-placeholder{color:var(--muted);font-size:.8rem;line-height:1.5}
+
+  .map-legend{position:absolute;bottom:1.5rem;left:1rem;z-index:1000;pointer-events:none;background:rgba(7,16,31,0.94);border:1px solid rgba(0,212,170,0.16);border-radius:12px;padding:.85rem 1rem;backdrop-filter:blur(16px);box-shadow:0 8px 28px rgba(0,0,0,0.5)}
+  .legend-title{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--teal);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.55rem}
+  .legend-item{display:flex;align-items:center;gap:.5rem;margin-bottom:.28rem;font-size:.7rem;color:rgba(226,232,240,0.65)}
+  .legend-color{width:13px;height:13px;border-radius:3px;flex-shrink:0;border:1px solid rgba(255,255,255,0.07)}
+
+  .stats-row { display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2rem; }
+  .mini-stat { background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;text-align:center; }
+  .mini-stat-num { font-family:'Space Mono',monospace;font-size:1.4rem;font-weight:700;background:linear-gradient(135deg,var(--teal),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+  .mini-stat-label { font-size:.7rem;color:var(--muted);margin-top:.2rem; }
+
+  .province-label {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #ffffff !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 0.75rem !important;
+    text-shadow: 0 0 3px #000, 0 0 5px #000 !important;
+    pointer-events: none !important;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  @media(max-width:700px){.stats-row{grid-template-columns:1fr 1fr}#leaflet-map{height:380px}.map-overlay{display:none}}
+  </style>
+</head>
+<body>
+<div class="bg-earth-container"><div id="earth"></div></div>
+<div class="c-dot" id="cdot"></div><div class="c-ring" id="cring"></div>
+<div id="sprog"></div><canvas id="bg-canvas"></canvas>
+<div class="aurora-layer"><div class="aura a1"></div><div class="aura a2"></div><div class="aura a3"></div></div>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">TS<span style="opacity:.5">.</span>geo</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li><li><a href="skills.html">Skills</a></li>
+    <li><a href="education.html">Education</a></li><li><a href="experience.html">Experience</a></li>
+    <li><a href="projects.html">Projects</a></li><li><a href="webgis.html">WebGIS</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+  <div class="container">
+    <div class="page-hero reveal">
+      <div class="page-hero-tag">// Part B · WebGIS Assignment</div>
+      <h1 class="page-hero-title">Nepal Tourism <span class="grad">Choropleth Dashboard</span></h1>
+      <p style="color:var(--muted);font-size:.88rem;margin-top:.75rem;max-width:620px;line-height:1.7">
+        Interactive Leaflet.js WebGIS dashboard visualizing annual tourist arrivals across Nepal's 7 provinces. Hover over any province to see real-time attribute data in the floating info panel.
+      </p>
+    </div>
+
+    <div class="webgis-wrapper reveal" style="margin-top:2rem">
+      <div class="map-overlay">
+        <div class="map-info-panel" id="map-info-panel">
+          <div class="info-panel-header">Province Info</div>
+          <div id="info-body"><p class="info-placeholder">Hover over a province to explore</p></div>
+        </div>
+      </div>
+      <div class="map-legend" id="map-legend"><div class="legend-title">Tourist Arrivals / Year</div></div>
+      <div id="leaflet-map"></div>
+    </div>
+
+    <div class="stats-row reveal">
+      <div class="mini-stat"><div class="mini-stat-num">7</div><div class="mini-stat-label">Provinces Mapped</div></div>
+      <div class="mini-stat"><div class="mini-stat-num">3.9M</div><div class="mini-stat-label">Total Tourist Arrivals</div></div>
+      <div class="mini-stat"><div class="mini-stat-num">5</div><div class="mini-stat-label">Choropleth Classes</div></div>
+      <div class="mini-stat"><div class="mini-stat-num">1.87M</div><div class="mini-stat-label">Peak · Bagmati Province</div></div>
+    </div>
+
+    <div style="margin-top:2.5rem;display:grid;grid-template-columns:1.2fr 0.8fr;gap:1.5rem" class="reveal">
+      <div>
+        <div class="section-tag">Geographic & Tourism Dynamics</div>
+        <p style="color:var(--dim);font-size:.85rem;line-height:1.75;margin-top:0.8rem">
+          This choropleth dashboard reveals a stark disparity in tourist distributions across Nepal. The concentration is heavily centered around <strong>Bagmati Province</strong> (containing the capital city Kathmandu) and <strong>Gandaki Province</strong> (containing Pokhara and the Annapurna conservation area). Together, these two provinces receive over 70% of the total annual arrivals.
+        </p>
+        <p style="color:var(--dim);font-size:.85rem;line-height:1.75;margin-top:0.8rem">
+          In contrast, western regions like <strong>Karnali</strong> and <strong>Sudurpashchim</strong> suffer from low accessibility despite housing pristine destinations like Rara Lake and Api Himal. Similarly, <strong>Madhesh Province</strong>, despite hosting the historic Janaki Temple in Janakpur, experiences a lower footprint of international tourists, signifying that arrivals are mostly driven by cross-border pilgrimage rather than commercial holiday tourism.
+        </p>
+      </div>
+      <div>
+        <div class="section-tag">Dataset Summary</div>
+        <ul style="list-style:none;padding:0;margin-top:1rem">
+          <li style="padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:.85rem;color:var(--dim);display:flex;gap:.5rem"><span style="color:var(--purple);flex-shrink:0">▸</span><span><strong style="color:var(--text)">Koshi:</strong> 428,000 arrivals · Everest Base Camp</span></li>
+          <li style="padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:.85rem;color:var(--dim);display:flex;gap:.5rem"><span style="color:var(--purple);flex-shrink:0">▸</span><span><strong style="color:var(--text)">Madhesh:</strong> 172,000 · Janaki Temple</span></li>
+          <li style="padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:.85rem;color:var(--dim);display:flex;gap:.5rem"><span style="color:var(--teal);flex-shrink:0">▸</span><span><strong style="color:var(--text)">Bagmati:</strong> 1,870,000 · Kathmandu Valley</span></li>
+          <li style="padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:.85rem;color:var(--dim);display:flex;gap:.5rem"><span style="color:var(--teal);flex-shrink:0">▸</span><span><strong style="color:var(--text)">Gandaki:</strong> 895,000 · Pokhara, Annapurna</span></li>
+          <li style="padding:.5rem 0;font-size:.85rem;color:var(--dim);display:flex;gap:.5rem"><span style="color:var(--purple);flex-shrink:0">▸</span><span><strong style="color:var(--text)">Lumbini, Karnali, Sudurpashchim</strong></span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer><p>Tushaar Sapkota · <span>Geomatics Engineering</span> · Kathmandu University · 2025</p></footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+<script>
+const provinceData = {
+  "1": { name: 'Koshi Province', capital: 'Biratnagar', population: 4534943, area_km2: 25905, tourist_arrivals: 428000, main_attraction: 'Everest Base Camp, Sagarmatha NP, Ilam Tea Gardens' },
+  "2": { name: 'Madhesh Province', capital: 'Janakpur', population: 6126288, area_km2: 9661, tourist_arrivals: 172000, main_attraction: 'Janaki Temple, Saptari, Gadhimai Temple' },
+  "3": { name: 'Bagmati Province', capital: 'Hetauda', population: 5529452, area_km2: 20300, tourist_arrivals: 1870000, main_attraction: 'Kathmandu Valley, Pashupatinath, Boudhanath, Langtang NP' },
+  "4": { name: 'Gandaki Province', capital: 'Pokhara', population: 2403757, area_km2: 21774, tourist_arrivals: 895000, main_attraction: 'Pokhara, Annapurna Circuit, Upper Mustang, Manaslu' },
+  "5": { name: 'Lumbini Province', capital: 'Deukhuri', population: 4499272, area_km2: 22288, tourist_arrivals: 368000, main_attraction: 'Lumbini Birthplace of Buddha, Bardiya NP, Tansen' },
+  "6": { name: 'Karnali Province', capital: 'Birendranagar', population: 1168515, area_km2: 27984, tourist_arrivals: 98000, main_attraction: 'Rara Lake, Khaptad NP, Dolpo, Shey Phoksundo Lake' },
+  "7": { name: 'Sudurpashchim Province', capital: 'Dhangadhi', population: 2552517, area_km2: 19539, tourist_arrivals: 87000, main_attraction: 'Api Himal, Shuklaphanta NP, Khaptad NP' }
+};
+
+const GRADES=[
+  {min:0,max:150000,color:'#0a3d2d',label:'< 150K'},
+  {min:150000,max:300000,color:'#0d5c43',label:'150K – 300K'},
+  {min:300000,max:500000,color:'#0a7a58',label:'300K – 500K'},
+  {min:500000,max:1000000,color:'#00a88a',label:'500K – 1M'},
+  {min:1000000,max:Infinity,color:'#00d4aa',label:'> 1M'},
+];
+function getColor(v){return(GRADES.find(g=>v>=g.min&&v<g.max)||GRADES[0]).color;}
+const lmap=L.map('leaflet-map',{center:[28.3,84.1],zoom:7,scrollWheelZoom:false});
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'&copy;<a href="https://openstreetmap.org/copyright">OSM</a> &copy;<a href="https://carto.com/">CARTO</a>',subdomains:'abcd',maxZoom:19}).addTo(lmap);
+const infoBody=document.getElementById('info-body');
+function showInfo(p){infoBody.innerHTML=`<div class="info-province-name">${p.name}</div><div class="info-row"><span>Capital</span><span class="info-val">${p.capital}</span></div><div class="info-row"><span>Population</span><span class="info-val">${(p.population/1e6).toFixed(2)}M</span></div><div class="info-row"><span>Area</span><span class="info-val">${p.area_km2.toLocaleString()} km²</span></div><div class="info-row"><span>Tourists/yr</span><span class="info-val">${(p.tourist_arrivals/1000).toFixed(0)}K</span></div><div class="info-attraction">${p.main_attraction}</div>`;}
+function resetInfo(){infoBody.innerHTML='<p class="info-placeholder">Hover over a province to explore</p>';}
+let gjLayer;
+
+// Fetch high-fidelity boundaries dynamically from geoJSON-Nepal
+fetch('https://raw.githubusercontent.com/mesaugat/geoJSON-Nepal/master/nepal-states.geojson')
+  .then(res => res.json())
+  .then(geojson => {
+    geojson.features.forEach(feat => {
+      // ADM1_EN matches "1", "2", etc.
+      const pId = feat.properties.ADM1_EN;
+      const data = provinceData[pId];
+      if (data) {
+        Object.assign(feat.properties, data);
+      }
+    });
+
+    gjLayer=L.geoJSON(geojson,{
+      style:f=>({fillColor:getColor(f.properties.tourist_arrivals || 0),weight:1.5,opacity:1,color:'#1a4a3a',fillOpacity:.8}),
+      onEachFeature(feat,layer){
+        const p=feat.properties;
+        if (p && p.name) {
+          const displayName = p.name.replace(' Province', '');
+          layer.bindTooltip(displayName, {
+            permanent: true,
+            direction: 'center',
+            className: 'province-label'
+          });
+        }
+        layer.on({
+          mouseover(e){e.target.setStyle({weight:2.5,color:'#f59e0b',fillOpacity:.92});if(!L.Browser.ie&&!L.Browser.opera&&!L.Browser.edge)e.target.bringToFront();showInfo(p);},
+          mouseout(e){gjLayer.resetStyle(e.target);resetInfo();},
+          click(e){lmap.fitBounds(e.target.getBounds(),{padding:[50,50]});}
+        });
+      }
+    }).addTo(lmap);
+  })
+  .catch(err => {
+    console.error("GeoJSON load failed:", err);
+    infoBody.innerHTML = '<p class="info-placeholder" style="color:var(--pink)">Error loading high-fidelity boundary files.</p>';
+  });
+
+const legEl=document.getElementById('map-legend');
+GRADES.forEach(g=>{const d=document.createElement('div');d.className='legend-item';d.innerHTML=`<div class="legend-color" style="background:${g.color}"></div><span>${g.label}</span>`;legEl.appendChild(d);});
+</script>
+</body>
+</html>

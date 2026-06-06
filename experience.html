@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Experience - Tushaar Sapkota</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .exp-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 2.5rem;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2rem;
+      align-items: start;
+      transition: all .3s;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .exp-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--teal), var(--purple));
+      opacity: 0;
+      transition: opacity .3s;
+    }
+
+
+
+    .exp-card:hover::before,
+    .exp-card:hover::after {
+      opacity: 1;
+    }
+
+    .exp-card:hover {
+      border-color: rgba(0, 212, 170, 0.26);
+      transform: translateY(-5px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .exp-icon-wrap {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: rgba(0, 212, 170, 0.06);
+      border: 1px solid rgba(0, 212, 170, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      transition: all .3s;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .exp-card:hover .exp-icon-wrap {
+      background: rgba(0, 212, 170, 0.1);
+      border-color: rgba(0, 212, 170, 0.3);
+      box-shadow: 0 0 24px rgba(0, 212, 170, 0.15);
+    }
+
+    .exp-body {
+      position: relative;
+      z-index: 1;
+    }
+
+    .exp-role {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: .3rem;
+    }
+
+    .exp-org {
+      font-family: 'Space Mono', monospace;
+      font-size: .7rem;
+      color: var(--teal);
+      letter-spacing: .06em;
+      margin-bottom: .4rem;
+    }
+
+    .exp-location {
+      font-family: 'Space Mono', monospace;
+      font-size: .62rem;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .exp-bullets {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 1.25rem;
+    }
+
+    .exp-bullets li {
+      font-size: .875rem;
+      color: var(--dim);
+      line-height: 1.75;
+      padding: .35rem 0 .35rem 1.5rem;
+      position: relative;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .exp-bullets li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--teal);
+      font-size: .7rem;
+      top: .55rem;
+    }
+
+    .exp-bullets li:last-child {
+      border-bottom: none;
+    }
+
+    .exp-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .35rem;
+    }
+
+    .skills-learned {
+      background: rgba(0, 212, 170, 0.03);
+      border: 1px solid rgba(0, 212, 170, 0.1);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      margin-top: 1.25rem;
+    }
+
+    .skills-learned-title {
+      font-family: 'Space Mono', monospace;
+      font-size: .6rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: .6rem;
+    }
+
+    @media(max-width:700px) {
+      .exp-card {
+        grid-template-columns: 1fr
+      }
+
+      .exp-icon-wrap {
+        width: 50px;
+        height: 50px;
+        font-size: 1.4rem
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-earth-container">
+    <div id="earth"></div>
+  </div>
+  <div class="c-dot" id="cdot"></div>
+  <div class="c-ring" id="cring"></div>
+  <div id="sprog"></div><canvas id="bg-canvas"></canvas>
+  <div class="aurora-layer">
+    <div class="aura a1"></div>
+    <div class="aura a2"></div>
+    <div class="aura a3"></div>
+  </div>
+
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">TS<span style="opacity:.5">.</span>geo</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="skills.html">Skills</a></li>
+      <li><a href="education.html">Education</a></li>
+      <li><a href="experience.html">Experience</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="webgis.html">WebGIS</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="container">
+      <div class="page-hero reveal">
+        <div class="page-hero-tag">// Leadership & Involvement</div>
+        <h1 class="page-hero-title"><span class="grad">Experience</span> & Roles</h1>
+        <p style="color:var(--muted);font-size:.88rem;margin-top:.75rem">The positions that taught me to lead,
+          coordinate and deliver under real pressure.</p>
+      </div>
+
+      <div style="margin-top:3rem">
+        <div class="exp-card reveal">
+          <div class="exp-icon-wrap">
+            <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+          </div>
+          <div class="exp-body">
+            <div class="exp-role">Administrator</div>
+            <div class="exp-org">Nepgeom ’26 - National Geomatics Student Exhibition</div>
+            <div class="exp-location">📍 Kathmandu University, Dhulikhel, Kavre</div>
+            <ul class="exp-bullets">
+              <li>Serving as Lead Administrator for Nepgeom '26, coordinating the premier geomatics student symposium
+                and exhibition bringing together spatial developers, students, and professionals from across Nepal.</li>
+              <li>Conducted most sucessful Acoustic night in the history of Kathmandu University 4000+ audiences.</li>
+              <li>Directing logistics, public outreach,and workshop scheduling for thousands of attendees.</li>
+              <li>Collaborating with departments and sponsors to host panels on Earth Observation, AI in land
+                administration, and open-source GIS technologies.</li>
+              <li>Guiding volunteer committees to ensure clean execution of technical sessions, map presentations, and
+                hands-on spatial hackathons.</li>
+            </ul>
+            <div class="skills-learned">
+              <div class="skills-learned-title">Skills Developed</div>
+              <div class="exp-tags">
+                <span class="skill-tag">Symposium Administration</span><span class="skill-tag">Logistical
+                  Operations</span>
+                <span class="skill-tag">Team Leadership</span><span class="skill-tag">Public Relations</span>
+                <span class="skill-tag">Database & Registry Management</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-card reveal">
+          <div class="exp-icon-wrap">
+            <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </div>
+          <div class="exp-body">
+            <div class="exp-role">Vice President</div>
+            <div class="exp-org">KMC Literature Club</div>
+            <div class="exp-location">📍 Kathmandu Model College, Bagbazar, Kathmandu</div>
+            <ul class="exp-bullets">
+              <li>Led the Literature Club as Vice President - responsible for event planning, member coordination, and
+                driving the club's cultural initiatives at KMC Bagbazar.</li>
+              <li>Spearheaded collaborative programmes that enhanced literary engagement across the college, including
+                reading circles, creative writing workshops, and inter-college events.</li>
+              <li>Managed communication between club leadership, college administration, and student body - learning how
+                to navigate institutional hierarchies while keeping the team motivated.</li>
+              <li>Built a culture of positive participation and attention to detail that translated directly into my
+                approach to GIS project management and academic teamwork at KU.</li>
+            </ul>
+            <div class="skills-learned">
+              <div class="skills-learned-title">Skills Developed</div>
+              <div class="exp-tags">
+                <span class="skill-tag">Event Management</span><span class="skill-tag">Team Leadership</span>
+                <span class="skill-tag">Communication</span><span class="skill-tag">Strategic Planning</span>
+                <span class="skill-tag">Stakeholder Coordination</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-card reveal">
+          <div class="exp-icon-wrap">
+            <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <div class="exp-body">
+            <div class="exp-role">Sergeant of Arms</div>
+            <div class="exp-org">KU LPD (Language & Public Discourse)</div>
+            <div class="exp-location">📍 Kathmandu University, Dhulikhel</div>
+            <ul class="exp-bullets">
+              <li>Served as Sergeant of Arms within KU LPD - responsible for maintaining procedural order during formal
+                meetings, debates, and official functions at the university level.</li>
+              <li>Enforced parliamentary procedures and ensured that meetings ran according to protocol, sharpening a
+                skill set around structure, discipline, and organisational awareness.</li>
+              <li>Demonstrated strong time management and composure in high-visibility settings - skills that translate
+                directly to coordinating multi-member GIS research projects under academic deadlines.</li>
+              <li>Worked closely with the executive board of LPD, gaining exposure to institutional decision-making and
+                how large organisations function under formal rules.</li>
+            </ul>
+            <div class="skills-learned">
+              <div class="skills-learned-title">Skills Developed</div>
+              <div class="exp-tags">
+                <span class="skill-tag">Parliamentary Procedure</span><span class="skill-tag">Organisational
+                  Discipline</span>
+                <span class="skill-tag">Time Management</span><span class="skill-tag">Composure Under Pressure</span>
+                <span class="skill-tag">Institutional Coordination</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-card reveal">
+          <div class="exp-icon-wrap">
+            <svg class="icon-svg icon-svg-lg" viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+              </polygon>
+            </svg>
+          </div>
+          <div class="exp-body">
+            <div class="exp-role">Organizer</div>
+            <div class="exp-org">Alumni Meet 2024</div>
+            <div class="exp-location">📍 Dhulikhel, Kavre</div>
+            <ul class="exp-bullets">
+              <li>Served as an organizer for the Alumni Meet 2024 held in Dhulikhel - coordinating logistics, schedules,
+                venue setup, and on-the-day crowd management for the event.</li>
+              <li>Collaborated directly with a diverse team spanning current students, faculty, and alumni - learning
+                how to align people with different expectations toward a common outcome.</li>
+              <li>Managed real-time problem-solving when plans changed on the day, reinforcing adaptability and
+                decision-making under uncertainty.</li>
+              <li>Built lasting connections with alumni working in GIS, land governance, and spatial technology -
+                conversations that directly informed my research direction.</li>
+            </ul>
+            <div class="skills-learned">
+              <div class="skills-learned-title">Skills Developed</div>
+              <div class="exp-tags">
+                <span class="skill-tag">Event Logistics</span><span class="skill-tag">Cross-Team Collaboration</span>
+                <span class="skill-tag">Real-Time Problem Solving</span><span class="skill-tag">Networking</span>
+                <span class="skill-tag">Adaptability</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Tushaar Sapkota · <span>Geomatics Engineering</span> · Kathmandu University · 2026</p>
+  </footer>
+  <script src="app.js"></script>
+  <script>
+    document.querySelectorAll('.exp-card').forEach(card => {
+      card.addEventListener('mousemove', e => { const r = card.getBoundingClientRect(); card.style.setProperty('--mx', (e.clientX - r.left) + 'px'); card.style.setProperty('--my', (e.clientY - r.top) + 'px'); });
+      card.addEventListener('mouseenter', () => { document.getElementById('cdot')?.classList.add('on'); document.getElementById('cring')?.classList.add('on'); });
+      card.addEventListener('mouseleave', () => { document.getElementById('cdot')?.classList.remove('on'); document.getElementById('cring')?.classList.remove('on'); });
+    });
+  </script>
+</body>
+
+</html>
