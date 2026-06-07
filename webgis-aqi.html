@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Realtime AQI WebGIS - Tushaar Sapkota</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .aqi-shell{display:grid;grid-template-columns:340px 1fr;gap:1.25rem;margin-top:2rem}
+    .aqi-panel,.aqi-map-card,.aqi-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;min-width:0}
+    .aqi-panel{padding:1rem;display:flex;flex-direction:column;gap:1rem}
+    .panel-kicker{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--teal);letter-spacing:.14em;text-transform:uppercase}
+    .current-aqi{padding:1rem;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}
+    .current-city{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.35rem}
+    .aqi-number{font-family:'Space Mono',monospace;font-size:3rem;font-weight:700;line-height:1;color:var(--teal)}
+    .aqi-category{display:inline-flex;align-items:center;height:26px;padding:0 .7rem;border-radius:999px;font-size:.7rem;font-weight:800;color:#07101f;margin-top:.55rem}
+    .reading-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+    .reading{padding:.75rem;border:1px solid rgba(255,255,255,.06);border-radius:8px;background:rgba(255,255,255,.025)}
+    .reading span{display:block;font-family:'Space Mono',monospace;font-size:.56rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+    .reading strong{display:block;margin-top:.25rem;font-size:.95rem;color:var(--text)}
+    .aqi-controls{display:grid;gap:.6rem}
+    .aqi-select,.aqi-btn{height:38px;border:1px solid rgba(255,255,255,.08);background:rgba(7,16,31,.9);color:var(--text);border-radius:8px;padding:0 .8rem;font-family:'Inter',sans-serif;font-weight:700}
+    .aqi-btn{cursor:pointer;background:var(--teal);color:#07101f;border-color:var(--teal)}
+    .aqi-btn.secondary{background:rgba(255,255,255,.04);color:var(--dim);border-color:rgba(255,255,255,.08)}
+    .aqi-status{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted);line-height:1.5;min-height:2rem}
+    .aqi-map-card{position:relative;overflow:hidden}
+    #aqi-map{height:620px;width:100%}
+    .map-badge{position:absolute;right:1rem;top:1rem;z-index:900;background:rgba(7,16,31,.94);border:1px solid rgba(0,191,165,.18);border-radius:10px;padding:.75rem .9rem;backdrop-filter:blur(14px)}
+    .map-badge strong{display:block;font-size:.78rem;margin-bottom:.15rem}
+    .map-badge span{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--muted)}
+    .aqi-marker{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;border:2px solid rgba(255,255,255,.9);box-shadow:0 0 24px rgba(0,0,0,.55);font-family:'Space Mono',monospace;font-size:.72rem;font-weight:800;color:#07101f}
+    .aqi-legend{display:grid;grid-template-columns:repeat(6,1fr);gap:.5rem;margin-top:1rem}
+    .legend-chip{border-radius:8px;padding:.7rem .55rem;color:#07101f;font-weight:800;font-size:.66rem;text-align:center}
+    .aqi-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:1.25rem;margin-top:1.25rem}
+    .aqi-card{padding:1.2rem}
+    .card-title{font-size:1rem;font-weight:700;margin-bottom:.9rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .card-title span{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--teal);letter-spacing:.12em;text-transform:uppercase}
+    .station-list{display:grid;gap:.55rem}
+    .station-row{display:grid;grid-template-columns:1.1fr 1.6fr auto;gap:.75rem;align-items:center;font-size:.76rem}
+    .station-name{font-weight:700;color:var(--text)}
+    .station-track{height:8px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}
+    .station-fill{height:100%;border-radius:999px}
+    .station-value{font-family:'Space Mono',monospace;color:var(--teal);font-size:.7rem}
+    #aqi-chart{width:100%;height:260px;display:block}
+    .insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.25rem}
+    .insight-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:1rem}
+    .insight-card strong{display:block;font-size:.82rem;margin-bottom:.35rem}
+    .insight-card p{font-size:.72rem;color:var(--muted);line-height:1.55}
+    .leaflet-control-attribution{background:rgba(3,7,18,.8)!important;color:rgba(71,85,105,.75)!important;font-size:.58rem!important}
+    .leaflet-control-attribution a{color:var(--teal)!important}
+    .leaflet-popup-content-wrapper{background:#07101f!important;color:var(--text)!important;border:1px solid rgba(0,191,165,.18)!important;border-radius:10px!important}
+    .leaflet-popup-tip{background:#07101f!important}
+    @media(max-width:1000px){.aqi-shell,.aqi-grid{grid-template-columns:1fr}.insight-grid{grid-template-columns:1fr}.aqi-legend{grid-template-columns:repeat(3,1fr)}#aqi-map{height:460px}}
+    @media(max-width:640px){.reading-grid,.station-row{grid-template-columns:1fr}.aqi-legend{grid-template-columns:1fr 1fr}.map-badge{display:none}}
+  </style>
+</head>
+<body>
+<div class="bg-earth-container"><div id="earth"></div></div>
+<div class="c-dot" id="cdot"></div><div class="c-ring" id="cring"></div>
+<div id="sprog"></div><canvas id="bg-canvas"></canvas>
+<div class="aurora-layer"><div class="aura a1"></div><div class="aura a2"></div><div class="aura a3"></div></div>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">TS<span style="opacity:.5">.</span>geo</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li><li><a href="skills.html">Skills</a></li>
+    <li><a href="education.html">Education</a></li><li><a href="experience.html">Experience</a></li>
+    <li><a href="projects.html">Projects</a></li><li><a href="webgis.html">WebGIS</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+  <div class="container">
+    <div class="page-hero reveal">
+      <div class="page-hero-tag">//Realtime WebGIS</div>
+      <h1 class="page-hero-title">Nepal <span class="grad">AQI Monitoring Map</span></h1>
+      <p style="color:var(--muted);font-size:.88rem;margin-top:.75rem;max-width:720px;line-height:1.7">
+        Live air quality dashboard for major Nepal cities using current US AQI, PM2.5, PM10, ozone, NO2, SO2, and carbon monoxide from Open-Meteo's air quality service.
+      </p>
+    </div>
+
+    <div class="aqi-shell reveal">
+      <aside class="aqi-panel">
+        <div class="panel-kicker">Selected Station</div>
+        <div class="current-aqi">
+          <div class="current-city" id="current-city">Loading Kathmandu</div>
+          <div class="aqi-number" id="current-aqi">--</div>
+          <div class="aqi-category" id="current-category" style="background:#94a3b8">Waiting</div>
+        </div>
+        <div class="reading-grid">
+          <div class="reading"><span>PM2.5</span><strong id="pm25">--</strong></div>
+          <div class="reading"><span>PM10</span><strong id="pm10">--</strong></div>
+          <div class="reading"><span>Ozone</span><strong id="ozone">--</strong></div>
+          <div class="reading"><span>NO2</span><strong id="no2">--</strong></div>
+          <div class="reading"><span>SO2</span><strong id="so2">--</strong></div>
+          <div class="reading"><span>CO</span><strong id="co">--</strong></div>
+        </div>
+        <div class="aqi-controls">
+          <select class="aqi-select" id="station-select"></select>
+          <button class="aqi-btn" id="refresh-aqi">Refresh Live AQI</button>
+          <button class="aqi-btn secondary" id="fit-nepal">Fit Nepal</button>
+        </div>
+        <div class="aqi-status" id="aqi-status">Connecting to realtime AQI service...</div>
+      </aside>
+
+      <section class="aqi-map-card">
+        <div class="map-badge"><strong>Realtime AQI Layer</strong><span id="map-timestamp">Awaiting update</span></div>
+        <div id="aqi-map"></div>
+      </section>
+    </div>
+
+    <div class="aqi-legend reveal" id="aqi-legend"></div>
+
+    <div class="aqi-grid reveal">
+      <div class="aqi-card">
+        <div class="card-title">Station Ranking <span>US AQI</span></div>
+        <div class="station-list" id="station-list"></div>
+      </div>
+      <div class="aqi-card">
+        <div class="card-title">Realtime Distribution <span>Live chart</span></div>
+        <canvas id="aqi-chart" width="520" height="280"></canvas>
+      </div>
+    </div>
+
+    <div class="insight-grid reveal">
+      <div class="insight-card"><strong>Operational View</strong><p>Markers update from the current AQI endpoint and are styled by health category for fast scanning.</p></div>
+      <div class="insight-card"><strong>Pollutant Detail</strong><p>The sidebar exposes PM2.5, PM10, ozone, nitrogen dioxide, sulphur dioxide, and carbon monoxide for the selected city.</p></div>
+      <div class="insight-card"><strong>Data Note</strong><p>Open-Meteo air quality values are model-based current conditions, useful for portfolio demonstration and situational monitoring.</p></div>
+    </div>
+  </div>
+</div>
+
+<footer><p>Tushaar Sapkota - <span>Geomatics Engineering</span> - Kathmandu University - 2025</p></footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+<script>
+const stations=[
+  {id:"kathmandu",name:"Kathmandu",province:"Bagmati",lat:27.7172,lon:85.3240},
+  {id:"pokhara",name:"Pokhara",province:"Gandaki",lat:28.2096,lon:83.9856},
+  {id:"biratnagar",name:"Biratnagar",province:"Koshi",lat:26.4525,lon:87.2718},
+  {id:"janakpur",name:"Janakpur",province:"Madhesh",lat:26.7288,lon:85.9267},
+  {id:"bharatpur",name:"Bharatpur",province:"Bagmati",lat:27.6768,lon:84.4359},
+  {id:"butwal",name:"Butwal",province:"Lumbini",lat:27.7006,lon:83.4484},
+  {id:"nepalgunj",name:"Nepalgunj",province:"Lumbini",lat:28.0500,lon:81.6167},
+  {id:"birendranagar",name:"Birendranagar",province:"Karnali",lat:28.6019,lon:81.6339},
+  {id:"dhangadhi",name:"Dhangadhi",province:"Sudurpashchim",lat:28.6852,lon:80.6216}
+];
+const categories=[
+  {max:50,label:"Good",color:"#22c55e"},
+  {max:100,label:"Moderate",color:"#facc15"},
+  {max:150,label:"Unhealthy SG",color:"#f97316"},
+  {max:200,label:"Unhealthy",color:"#ef4444"},
+  {max:300,label:"Very Unhealthy",color:"#a855f7"},
+  {max:500,label:"Hazardous",color:"#7f1d1d"}
+];
+const map=L.map("aqi-map",{center:[28.25,84.15],zoom:7,scrollWheelZoom:true,wheelPxPerZoomLevel:80});
+L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{attribution:'&copy;<a href="https://openstreetmap.org/copyright">OSM</a> &copy;<a href="https://carto.com/">CARTO</a>',subdomains:"abcd",maxZoom:19}).addTo(map);
+const markers={},stationData=new Map(),select=document.getElementById("station-select"),listEl=document.getElementById("station-list"),statusEl=document.getElementById("aqi-status"),chart=document.getElementById("aqi-chart"),ctx=chart.getContext("2d");
+stations.forEach(s=>select.insertAdjacentHTML("beforeend",`<option value="${s.id}">${s.name} - ${s.province}</option>`));
+document.getElementById("aqi-legend").innerHTML=categories.map(c=>`<div class="legend-chip" style="background:${c.color}">${c.label}<br>${c.max===500?"301+":c.max}</div>`).join("");
+function categoryFor(aqi){return categories.find(c=>aqi<=c.max)||categories[categories.length-1]}
+function value(v,unit){return v==null?"--":Number(v).toFixed(v>100?0:1)+" "+unit}
+function endpoint(s){const vars="us_aqi,pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone";return `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${s.lat}&longitude=${s.lon}&current=${vars}&timezone=auto`}
+function normalize(s,json){const c=json.current||{};return{...s,time:c.time,aqi:Math.round(c.us_aqi||0),pm25:c.pm2_5,pm10:c.pm10,co:c.carbon_monoxide,no2:c.nitrogen_dioxide,so2:c.sulphur_dioxide,ozone:c.ozone}}
+function setSelected(id){const data=stationData.get(id);if(!data)return;const cat=categoryFor(data.aqi);select.value=id;document.getElementById("current-city").textContent=data.name+" - "+data.province;document.getElementById("current-aqi").textContent=data.aqi||"--";document.getElementById("current-category").textContent=cat.label;document.getElementById("current-category").style.background=cat.color;document.getElementById("pm25").textContent=value(data.pm25,"ug/m3");document.getElementById("pm10").textContent=value(data.pm10,"ug/m3");document.getElementById("ozone").textContent=value(data.ozone,"ug/m3");document.getElementById("no2").textContent=value(data.no2,"ug/m3");document.getElementById("so2").textContent=value(data.so2,"ug/m3");document.getElementById("co").textContent=value(data.co,"ug/m3");map.setView([data.lat,data.lon],9);markers[id]?.openPopup()}
+function renderMarkers(){stations.forEach(s=>{const data=stationData.get(s.id);if(!data)return;const cat=categoryFor(data.aqi);const html=`<div class="aqi-marker" style="background:${cat.color}">${data.aqi}</div>`;if(markers[s.id]){markers[s.id].setIcon(L.divIcon({className:"",html,iconSize:[42,42],iconAnchor:[21,21]}));markers[s.id].setPopupContent(popup(data,cat))}else{markers[s.id]=L.marker([s.lat,s.lon],{icon:L.divIcon({className:"",html,iconSize:[42,42],iconAnchor:[21,21]})}).addTo(map).bindPopup(popup(data,cat)).on("click",()=>setSelected(s.id))}})}
+function popup(data,cat){return `<strong>${data.name}</strong><br><span style="color:#94a3b8">${data.province}</span><br>AQI: <strong>${data.aqi}</strong> (${cat.label})<br>PM2.5: ${value(data.pm25,"ug/m3")}`}
+function renderList(){const rows=[...stationData.values()].sort((a,b)=>b.aqi-a.aqi),max=Math.max(...rows.map(r=>r.aqi),1);listEl.innerHTML=rows.map(r=>{const cat=categoryFor(r.aqi);return `<div class="station-row"><div class="station-name">${r.name}</div><div class="station-track"><div class="station-fill" style="width:${Math.max(5,r.aqi/max*100)}%;background:${cat.color}"></div></div><div class="station-value">${r.aqi}</div></div>`}).join("");drawChart(rows)}
+function drawChart(rows){const dpr=window.devicePixelRatio||1,w=chart.clientWidth||520,h=260,pad=30;chart.width=w*dpr;chart.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);const max=Math.max(...rows.map(r=>r.aqi),100),slot=(w-pad*2)/rows.length,barW=slot*.6;rows.forEach((r,i)=>{const cat=categoryFor(r.aqi),x=pad+i*slot+slot*.2,bh=(h-72)*(r.aqi/max),y=h-42-bh;ctx.fillStyle=cat.color;ctx.fillRect(x,y,barW,bh);ctx.fillStyle="rgba(226,232,240,.72)";ctx.font="10px Inter";ctx.textAlign="center";ctx.fillText(r.name.slice(0,8),x+barW/2,h-22)});ctx.fillStyle="rgba(100,116,139,.9)";ctx.font="11px Space Mono";ctx.textAlign="left";ctx.fillText("Current US AQI by station",pad,16)}
+async function loadAQI(){statusEl.textContent="Refreshing current AQI readings...";try{const results=await Promise.all(stations.map(async s=>normalize(s,await fetch(endpoint(s)).then(r=>{if(!r.ok)throw new Error("AQI request failed");return r.json()}))));results.forEach(r=>stationData.set(r.id,r));renderMarkers();renderList();const first=stationData.get(select.value)||results[0];setSelected(first.id);const stamp=first.time?new Date(first.time).toLocaleString():"Live update complete";document.getElementById("map-timestamp").textContent=stamp;statusEl.textContent="Last update: "+stamp}catch(err){statusEl.textContent="AQI service unavailable. Check network and try refresh.";console.error(err)}}
+select.addEventListener("change",e=>setSelected(e.target.value));
+document.getElementById("refresh-aqi").addEventListener("click",loadAQI);
+document.getElementById("fit-nepal").addEventListener("click",()=>map.fitBounds(stations.map(s=>[s.lat,s.lon]),{padding:[55,55]}));
+window.addEventListener("resize",()=>renderList());
+loadAQI();
+</script>
+</body>
+</html>

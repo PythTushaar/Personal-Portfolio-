@@ -1,54 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>WebGIS Dashboard - Tushaar Sapkota</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="style.css" />
   <style>
-  .webgis-wrapper { position:relative;border-radius:20px;overflow:hidden;border:1px solid rgba(0,212,170,0.14);box-shadow:0 45px 90px rgba(0,0,0,0.55),0 0 0 1px rgba(0,212,170,0.04);background:var(--bg2); }
-  #leaflet-map { height:560px;width:100%; }
-  .leaflet-control-attribution{background:rgba(3,7,18,0.8)!important;color:rgba(71,85,105,0.7)!important;font-size:.58rem!important}
-  .leaflet-control-attribution a{color:var(--teal)!important}
-  .leaflet-control-zoom a{background:rgba(7,16,31,0.95)!important;color:var(--teal)!important;border-color:rgba(0,212,170,0.18)!important}
-  .leaflet-control-zoom a:hover{background:rgba(0,212,170,0.1)!important}
-
-  .map-overlay{position:absolute;top:1rem;right:1rem;z-index:1000;pointer-events:none}
-  .map-info-panel{background:rgba(7,16,31,0.96);border:1px solid rgba(0,212,170,0.22);border-radius:14px;padding:1rem 1.25rem;min-width:235px;max-width:268px;backdrop-filter:blur(18px);box-shadow:0 8px 36px rgba(0,0,0,0.65)}
-  .info-panel-header{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--teal);text-transform:uppercase;letter-spacing:.14em;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid rgba(0,212,170,0.12);display:flex;align-items:center;gap:.5rem}
-  .info-panel-header::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal);animation:blink 1.4s ease infinite}
-  .info-province-name{font-size:1rem;font-weight:700;margin-bottom:.6rem;background:linear-gradient(135deg,var(--text),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .info-row{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;margin-bottom:.3rem;color:rgba(226,232,240,0.52)}
-  .info-val{color:var(--teal);font-family:'Space Mono',monospace;font-size:.72rem;font-weight:700}
-  .info-attraction{margin-top:.65rem;font-size:.69rem;color:rgba(226,232,240,0.36);line-height:1.45;border-top:1px solid rgba(0,212,170,0.08);padding-top:.55rem}
-  .info-placeholder{color:var(--muted);font-size:.8rem;line-height:1.5}
-
-  .map-legend{position:absolute;bottom:1.5rem;left:1rem;z-index:1000;pointer-events:none;background:rgba(7,16,31,0.94);border:1px solid rgba(0,212,170,0.16);border-radius:12px;padding:.85rem 1rem;backdrop-filter:blur(16px);box-shadow:0 8px 28px rgba(0,0,0,0.5)}
-  .legend-title{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--teal);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.55rem}
-  .legend-item{display:flex;align-items:center;gap:.5rem;margin-bottom:.28rem;font-size:.7rem;color:rgba(226,232,240,0.65)}
-  .legend-color{width:13px;height:13px;border-radius:3px;flex-shrink:0;border:1px solid rgba(255,255,255,0.07)}
-
-  .stats-row { display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2rem; }
-  .mini-stat { background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;text-align:center; }
-  .mini-stat-num { font-family:'Space Mono',monospace;font-size:1.4rem;font-weight:700;background:linear-gradient(135deg,var(--teal),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
-  .mini-stat-label { font-size:.7rem;color:var(--muted);margin-top:.2rem; }
-
-  .province-label {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    color: #ffffff !important;
-    font-family: 'Inter', sans-serif !important;
-    font-weight: 700 !important;
-    font-size: 0.75rem !important;
-    text-shadow: 0 0 3px #000, 0 0 5px #000 !important;
-    pointer-events: none !important;
-    text-align: center;
-    white-space: nowrap;
-  }
-
-  @media(max-width:700px){.stats-row{grid-template-columns:1fr 1fr}#leaflet-map{height:380px}.map-overlay{display:none}}
+    .webgis-wrapper{position:relative;border-radius:20px;overflow:hidden;border:1px solid rgba(0,212,170,.14);box-shadow:0 45px 90px rgba(0,0,0,.55),0 0 0 1px rgba(0,212,170,.04);background:var(--bg2)}
+    #leaflet-map{height:600px;width:100%}
+    .leaflet-control-attribution{background:rgba(3,7,18,.8)!important;color:rgba(71,85,105,.7)!important;font-size:.58rem!important}
+    .leaflet-control-attribution a{color:var(--teal)!important}
+    .leaflet-control-zoom a{background:rgba(7,16,31,.95)!important;color:var(--teal)!important;border-color:rgba(0,212,170,.18)!important}
+    .leaflet-control-zoom a:hover{background:rgba(0,212,170,.1)!important}
+    .map-toolbar{position:absolute;top:1rem;left:1rem;z-index:1000;display:flex;flex-direction:column;gap:.75rem;max-width:310px}
+    .map-tool-card,.map-info-panel,.map-legend{background:rgba(7,16,31,.96);border:1px solid rgba(0,212,170,.16);border-radius:12px;backdrop-filter:blur(16px);box-shadow:0 8px 28px rgba(0,0,0,.5)}
+    .map-tool-card{padding:.75rem}
+    .tool-label{font-family:'Space Mono',monospace;font-size:.56rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+    .segmented{display:grid;grid-template-columns:repeat(2,1fr);gap:.35rem}
+    .tool-btn,.map-select{height:34px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:var(--dim);border-radius:7px;font-size:.68rem;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:.18s}
+    .tool-btn:hover,.tool-btn.active{color:#07101f;background:var(--teal);border-color:var(--teal)}
+    .map-select{width:100%;padding:0 .65rem;color:var(--text);background:rgba(7,16,31,.96)}
+    .map-actions{display:grid;grid-template-columns:1fr 1fr;gap:.45rem;margin-top:.5rem}
+    .map-status{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--teal);margin-top:.55rem;min-height:1rem}
+    .map-overlay{position:absolute;top:1rem;right:1rem;z-index:1000;pointer-events:none}
+    .map-info-panel{padding:1rem 1.25rem;min-width:235px;max-width:270px}
+    .info-panel-header{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--teal);text-transform:uppercase;letter-spacing:.14em;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid rgba(0,212,170,.12)}
+    .info-province-name{font-size:1rem;font-weight:700;margin-bottom:.6rem;color:var(--text)}
+    .info-row{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;margin-bottom:.3rem;color:rgba(226,232,240,.52)}
+    .info-val{color:var(--teal);font-family:'Space Mono',monospace;font-size:.72rem;font-weight:700}
+    .info-attraction{margin-top:.65rem;font-size:.69rem;color:rgba(226,232,240,.42);line-height:1.45;border-top:1px solid rgba(0,212,170,.08);padding-top:.55rem}
+    .info-placeholder{color:var(--muted);font-size:.8rem;line-height:1.5}
+    .map-legend{position:absolute;bottom:1.5rem;left:1rem;z-index:1000;pointer-events:none;padding:.85rem 1rem}
+    .legend-title{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--teal);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.55rem}
+    .legend-item{display:flex;align-items:center;gap:.5rem;margin-bottom:.28rem;font-size:.7rem;color:rgba(226,232,240,.65)}
+    .legend-color{width:13px;height:13px;border-radius:3px;flex-shrink:0;border:1px solid rgba(255,255,255,.07)}
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2rem}
+    .mini-stat{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;text-align:center}
+    .mini-stat-num{font-family:'Space Mono',monospace;font-size:1.4rem;font-weight:700;color:var(--teal)}
+    .mini-stat-label{font-size:.7rem;color:var(--muted);margin-top:.2rem}
+    .province-label{background:transparent!important;border:none!important;box-shadow:none!important;color:#fff!important;font-family:'Inter',sans-serif!important;font-weight:700!important;font-size:.75rem!important;text-shadow:0 0 3px #000,0 0 5px #000!important;pointer-events:none!important;text-align:center;white-space:nowrap}
+    .webgis-subsystems{display:grid;grid-template-columns:1.1fr .9fr;gap:1.25rem;margin-top:2rem}
+    .subsystem-panel{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem;min-width:0}
+    .panel-title{font-size:1rem;font-weight:700;margin-bottom:.85rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .panel-title span{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--teal);letter-spacing:.12em;text-transform:uppercase}
+    .rank-list{display:grid;gap:.6rem}
+    .rank-item{display:grid;grid-template-columns:1.15fr 1.8fr auto;gap:.8rem;align-items:center;font-size:.78rem;color:var(--dim)}
+    .rank-name{color:var(--text);font-weight:700;white-space:nowrap}
+    .rank-track{height:8px;border-radius:999px;background:rgba(255,255,255,.05);overflow:hidden}
+    .rank-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--teal),var(--purple))}
+    .rank-value{font-family:'Space Mono',monospace;color:var(--teal);font-size:.7rem}
+    .aqi-zone-list{display:grid;gap:.6rem}
+    .aqi-zone-row{display:grid;grid-template-columns:1fr auto;gap:.75rem;align-items:center;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025);border-radius:8px;padding:.7rem}
+    .aqi-zone-city{font-size:.8rem;font-weight:700;color:var(--text)}
+    .aqi-zone-meta{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--muted);margin-top:.15rem}
+    .aqi-zone-value{display:grid;place-items:center;min-width:54px;height:34px;border-radius:999px;color:#07101f;font-family:'Space Mono',monospace;font-size:.78rem;font-weight:800}
+    .aqi-legend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;margin-top:.8rem}
+    .aqi-legend-chip{border-radius:7px;padding:.55rem .4rem;color:#07101f;font-size:.58rem;font-weight:800;text-align:center;line-height:1.25}
+    .aqi-panel-actions{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-top:.8rem}
+    .aqi-zone-marker{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,.88);box-shadow:0 0 22px rgba(0,0,0,.6);color:#07101f;font-family:'Space Mono',monospace;font-size:.7rem;font-weight:900}
+    .circuit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:1rem}
+    .circuit-card{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);border-radius:8px;padding:.9rem;cursor:pointer;transition:.18s}
+    .circuit-card:hover,.circuit-card.active{border-color:var(--teal);background:rgba(0,191,165,.08)}
+    .circuit-card h3{font-size:.85rem;margin-bottom:.35rem}
+    .circuit-card p,.analysis-card p{font-size:.72rem;color:var(--muted);line-height:1.55}
+    .analytics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.25rem}
+    .analysis-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:1rem}
+    .analysis-card strong{display:block;font-size:.8rem;margin-bottom:.35rem}
+    #tourism-chart{width:100%;height:240px;display:block}
+    .hotspot-marker{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#ffb300;color:#07101f;border:2px solid rgba(255,255,255,.88);box-shadow:0 0 18px rgba(255,179,0,.65);font-size:.78rem;font-weight:900}
+    .leaflet-popup-content-wrapper{background:#07101f!important;color:var(--text)!important;border:1px solid rgba(0,212,170,.18)!important;border-radius:10px!important}
+    .leaflet-popup-tip{background:#07101f!important}
+    @media(max-width:900px){.webgis-subsystems{grid-template-columns:1fr}.analytics-grid{grid-template-columns:1fr 1fr}.circuit-grid{grid-template-columns:1fr}.map-toolbar{position:relative;top:auto;left:auto;max-width:none;margin:0}.webgis-wrapper{overflow:visible}.map-overlay,.map-legend{display:none}}
+    @media(max-width:700px){.stats-row{grid-template-columns:1fr 1fr}#leaflet-map{height:380px}.rank-item,.aqi-zone-row{grid-template-columns:1fr}.rank-value{justify-self:start}.analytics-grid{grid-template-columns:1fr}.aqi-legend-grid{grid-template-columns:1fr 1fr}}
   </style>
 </head>
 <body>
@@ -71,125 +96,220 @@
 <div class="page-wrap">
   <div class="container">
     <div class="page-hero reveal">
-      <div class="page-hero-tag">// Part B · WebGIS Assignment</div>
-      <h1 class="page-hero-title">Nepal Tourism <span class="grad">Choropleth Dashboard</span></h1>
-      <p style="color:var(--muted);font-size:.88rem;margin-top:.75rem;max-width:620px;line-height:1.7">
-        Interactive Leaflet.js WebGIS dashboard visualizing annual tourist arrivals across Nepal's 7 provinces. Hover over any province to see real-time attribute data in the floating info panel.
+      <div class="page-hero-tag">//WebGIS</div>
+      <h1 class="page-hero-title">Nepal Tourism <span class="grad">WebGIS Command Center</span></h1>
+      <p style="color:var(--muted);font-size:.88rem;margin-top:.75rem;max-width:680px;line-height:1.7">
+        A feature-rich Leaflet.js dashboard for tourism arrivals, accessibility, destination hotspots, route circuits, and decision analytics across Nepal's 7 provinces.
       </p>
     </div>
 
     <div class="webgis-wrapper reveal" style="margin-top:2rem">
+      <div class="map-toolbar">
+        <div class="map-tool-card">
+          <div class="tool-label">Data Layer</div>
+          <div class="segmented">
+            <button class="tool-btn active" data-layer-mode="tourists">Tourists</button>
+            <button class="tool-btn" data-layer-mode="access">Access</button>
+          </div>
+        </div>
+        <div class="map-tool-card">
+          <div class="tool-label">Map Subsystems</div>
+          <select class="map-select" id="province-search"><option value="">Fly to province</option></select>
+          <div class="map-actions">
+            <button class="tool-btn" id="toggle-hotspots">Hotspots</button>
+            <button class="tool-btn active" id="toggle-aqi">AQI Zones</button>
+            <button class="tool-btn" id="toggle-routes">Circuits</button>
+            <button class="tool-btn" id="measure-btn">Measure</button>
+            <button class="tool-btn" id="reset-map">Reset</button>
+          </div>
+          <div class="map-status" id="map-status">Tourism layer ready</div>
+        </div>
+        <div class="map-tool-card">
+          <div class="tool-label">Basemap</div>
+          <select class="map-select" id="basemap-select">
+            <option value="dark">Dark GIS</option>
+            <option value="terrain">Terrain</option>
+            <option value="street">Street</option>
+          </select>
+        </div>
+      </div>
       <div class="map-overlay">
-        <div class="map-info-panel" id="map-info-panel">
+        <div class="map-info-panel">
           <div class="info-panel-header">Province Info</div>
           <div id="info-body"><p class="info-placeholder">Hover over a province to explore</p></div>
         </div>
       </div>
-      <div class="map-legend" id="map-legend"><div class="legend-title">Tourist Arrivals / Year</div></div>
+      <div class="map-legend" id="map-legend"></div>
       <div id="leaflet-map"></div>
     </div>
 
     <div class="stats-row reveal">
       <div class="mini-stat"><div class="mini-stat-num">7</div><div class="mini-stat-label">Provinces Mapped</div></div>
       <div class="mini-stat"><div class="mini-stat-num">3.9M</div><div class="mini-stat-label">Total Tourist Arrivals</div></div>
-      <div class="mini-stat"><div class="mini-stat-num">5</div><div class="mini-stat-label">Choropleth Classes</div></div>
-      <div class="mini-stat"><div class="mini-stat-num">1.87M</div><div class="mini-stat-label">Peak · Bagmati Province</div></div>
+      <div class="mini-stat"><div class="mini-stat-num">9</div><div class="mini-stat-label">Destination Hotspots</div></div>
+      <div class="mini-stat"><div class="mini-stat-num">9</div><div class="mini-stat-label">AQI City Zones</div></div>
     </div>
 
-    <div style="margin-top:2.5rem;display:grid;grid-template-columns:1.2fr 0.8fr;gap:1.5rem" class="reveal">
+    <div class="webgis-subsystems reveal">
+      <div class="subsystem-panel">
+        <div class="panel-title">Tourism Intelligence <span id="active-layer-label">Tourist arrivals</span></div>
+        <div class="rank-list" id="rank-list"></div>
+      </div>
+      <div class="subsystem-panel">
+        <div class="panel-title">AQI Index Zones <span id="aqi-updated">Realtime</span></div>
+        <div class="aqi-zone-list" id="aqi-zone-list"></div>
+        <div class="aqi-legend-grid" id="aqi-legend-grid"></div>
+        <div class="aqi-panel-actions">
+          <button class="tool-btn" id="refresh-aqi">Refresh AQI</button>
+          <button class="tool-btn" id="fit-aqi">Fit AQI</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsystem-panel reveal" style="margin-top:1.25rem">
+      <div class="panel-title">Tourism Distribution Analytics <span>Live chart</span></div>
+      <canvas id="tourism-chart" width="920" height="260"></canvas>
+    </div>
+
+    <div class="subsystem-panel reveal" style="margin-top:1.25rem">
+      <div class="panel-title">Tourism Circuit Planner <span>Click a circuit</span></div>
+      <div class="circuit-grid" id="circuit-grid"></div>
+    </div>
+
+    <div class="analytics-grid reveal">
+      <div class="analysis-card"><strong>Market Concentration</strong><p>Bagmati and Gandaki dominate arrivals, creating a clear gateway-and-leisure tourism pattern.</p></div>
+      <div class="analysis-card"><strong>Underserved West</strong><p>Karnali and Sudurpashchim have high nature value but need stronger access and destination packaging.</p></div>
+      <div class="analysis-card"><strong>Pilgrimage Spine</strong><p>Lumbini, Janakpur, and Kathmandu form a heritage corridor with strong cross-border potential.</p></div>
+      <div class="analysis-card"><strong>GIS Operations</strong><p>Use layer modes, hotspots, circuits, and measurement to compare geography with tourism demand.</p></div>
+    </div>
+
+    <div style="margin-top:2.5rem;display:grid;grid-template-columns:1.2fr .8fr;gap:1.5rem" class="reveal">
       <div>
         <div class="section-tag">Geographic & Tourism Dynamics</div>
-        <p style="color:var(--dim);font-size:.85rem;line-height:1.75;margin-top:0.8rem">
-          This choropleth dashboard reveals a stark disparity in tourist distributions across Nepal. The concentration is heavily centered around <strong>Bagmati Province</strong> (containing the capital city Kathmandu) and <strong>Gandaki Province</strong> (containing Pokhara and the Annapurna conservation area). Together, these two provinces receive over 70% of the total annual arrivals.
+        <p style="color:var(--dim);font-size:.85rem;line-height:1.75;margin-top:.8rem">
+          The system shows how Nepal's tourism footprint is concentrated around Bagmati and Gandaki, while western provinces contain strong nature destinations that remain comparatively under-visited.
         </p>
-        <p style="color:var(--dim);font-size:.85rem;line-height:1.75;margin-top:0.8rem">
-          In contrast, western regions like <strong>Karnali</strong> and <strong>Sudurpashchim</strong> suffer from low accessibility despite housing pristine destinations like Rara Lake and Api Himal. Similarly, <strong>Madhesh Province</strong>, despite hosting the historic Janaki Temple in Janakpur, experiences a lower footprint of international tourists, signifying that arrivals are mostly driven by cross-border pilgrimage rather than commercial holiday tourism.
+        <p style="color:var(--dim);font-size:.85rem;line-height:1.75;margin-top:.8rem">
+          Switching between arrivals and accessibility helps compare tourism demand with infrastructure readiness. Hotspot and circuit overlays make the dashboard useful for planning, not only display.
         </p>
       </div>
       <div>
-        <div class="section-tag">Dataset Summary</div>
+        <div class="section-tag">Subsystems Added</div>
         <ul style="list-style:none;padding:0;margin-top:1rem">
-          <li style="padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:.85rem;color:var(--dim);display:flex;gap:.5rem"><span style="color:var(--purple);flex-shrink:0">▸</span><span><strong style="color:var(--text)">Koshi:</strong> 428,000 arrivals · Everest Base Camp</span></li>
-          <li style="padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:.85rem;color:var(--dim);display:flex;gap:.5rem"><span style="color:var(--purple);flex-shrink:0">▸</span><span><strong style="color:var(--text)">Madhesh:</strong> 172,000 · Janaki Temple</span></li>
-          <li style="padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:.85rem;color:var(--dim);display:flex;gap:.5rem"><span style="color:var(--teal);flex-shrink:0">▸</span><span><strong style="color:var(--text)">Bagmati:</strong> 1,870,000 · Kathmandu Valley</span></li>
-          <li style="padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:.85rem;color:var(--dim);display:flex;gap:.5rem"><span style="color:var(--teal);flex-shrink:0">▸</span><span><strong style="color:var(--text)">Gandaki:</strong> 895,000 · Pokhara, Annapurna</span></li>
-          <li style="padding:.5rem 0;font-size:.85rem;color:var(--dim);display:flex;gap:.5rem"><span style="color:var(--purple);flex-shrink:0">▸</span><span><strong style="color:var(--text)">Lumbini, Karnali, Sudurpashchim</strong></span></li>
+          <li style="padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.85rem;color:var(--dim)">Data layer switching: arrivals and access</li>
+          <li style="padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.85rem;color:var(--dim)">Destination hotspot overlay and popup details</li>
+          <li style="padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.85rem;color:var(--dim)">Tourism route circuit planner</li>
+          <li style="padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.85rem;color:var(--dim)">Distance measurement tool</li>
+          <li style="padding:.5rem 0;font-size:.85rem;color:var(--dim)">Live ranking list and canvas chart</li>
         </ul>
       </div>
     </div>
   </div>
 </div>
 
-<footer><p>Tushaar Sapkota · <span>Geomatics Engineering</span> · Kathmandu University · 2025</p></footer>
+<footer><p>Tushaar Sapkota - <span>Geomatics Engineering</span> - Kathmandu University - 2025</p></footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="app.js"></script>
 <script>
-const provinceData = {
-  "1": { name: 'Koshi Province', capital: 'Biratnagar', population: 4534943, area_km2: 25905, tourist_arrivals: 428000, main_attraction: 'Everest Base Camp, Sagarmatha NP, Ilam Tea Gardens' },
-  "2": { name: 'Madhesh Province', capital: 'Janakpur', population: 6126288, area_km2: 9661, tourist_arrivals: 172000, main_attraction: 'Janaki Temple, Saptari, Gadhimai Temple' },
-  "3": { name: 'Bagmati Province', capital: 'Hetauda', population: 5529452, area_km2: 20300, tourist_arrivals: 1870000, main_attraction: 'Kathmandu Valley, Pashupatinath, Boudhanath, Langtang NP' },
-  "4": { name: 'Gandaki Province', capital: 'Pokhara', population: 2403757, area_km2: 21774, tourist_arrivals: 895000, main_attraction: 'Pokhara, Annapurna Circuit, Upper Mustang, Manaslu' },
-  "5": { name: 'Lumbini Province', capital: 'Deukhuri', population: 4499272, area_km2: 22288, tourist_arrivals: 368000, main_attraction: 'Lumbini Birthplace of Buddha, Bardiya NP, Tansen' },
-  "6": { name: 'Karnali Province', capital: 'Birendranagar', population: 1168515, area_km2: 27984, tourist_arrivals: 98000, main_attraction: 'Rara Lake, Khaptad NP, Dolpo, Shey Phoksundo Lake' },
-  "7": { name: 'Sudurpashchim Province', capital: 'Dhangadhi', population: 2552517, area_km2: 19539, tourist_arrivals: 87000, main_attraction: 'Api Himal, Shuklaphanta NP, Khaptad NP' }
+const provinceData={
+  "1":{name:"Koshi Province",capital:"Biratnagar",population:4534943,area_km2:25905,tourist_arrivals:428000,access_score:64,main_attraction:"Everest Base Camp, Sagarmatha NP, Ilam Tea Gardens"},
+  "2":{name:"Madhesh Province",capital:"Janakpur",population:6126288,area_km2:9661,tourist_arrivals:172000,access_score:78,main_attraction:"Janaki Temple, Saptari, Gadhimai Temple"},
+  "3":{name:"Bagmati Province",capital:"Hetauda",population:5529452,area_km2:20300,tourist_arrivals:1870000,access_score:95,main_attraction:"Kathmandu Valley, Pashupatinath, Boudhanath, Langtang NP"},
+  "4":{name:"Gandaki Province",capital:"Pokhara",population:2403757,area_km2:21774,tourist_arrivals:895000,access_score:82,main_attraction:"Pokhara, Annapurna Circuit, Upper Mustang, Manaslu"},
+  "5":{name:"Lumbini Province",capital:"Deukhuri",population:4499272,area_km2:22288,tourist_arrivals:368000,access_score:72,main_attraction:"Lumbini Birthplace of Buddha, Bardiya NP, Tansen"},
+  "6":{name:"Karnali Province",capital:"Birendranagar",population:1168515,area_km2:27984,tourist_arrivals:98000,access_score:38,main_attraction:"Rara Lake, Khaptad NP, Dolpo, Shey Phoksundo Lake"},
+  "7":{name:"Sudurpashchim Province",capital:"Dhangadhi",population:2552517,area_km2:19539,tourist_arrivals:87000,access_score:44,main_attraction:"Api Himal, Shuklaphanta NP, Khaptad NP"}
 };
-
-const GRADES=[
-  {min:0,max:150000,color:'#0a3d2d',label:'< 150K'},
-  {min:150000,max:300000,color:'#0d5c43',label:'150K – 300K'},
-  {min:300000,max:500000,color:'#0a7a58',label:'300K – 500K'},
-  {min:500000,max:1000000,color:'#00a88a',label:'500K – 1M'},
-  {min:1000000,max:Infinity,color:'#00d4aa',label:'> 1M'},
+const layerModes={
+  tourists:{label:"Tourist arrivals",metric:p=>p.tourist_arrivals,format:v=>v>=1e6?(v/1e6).toFixed(2)+"M":Math.round(v/1e3)+"K",grades:[{min:0,max:150000,color:"#0a3d2d",label:"< 150K"},{min:150000,max:300000,color:"#0d5c43",label:"150K - 300K"},{min:300000,max:500000,color:"#0a7a58",label:"300K - 500K"},{min:500000,max:1000000,color:"#00a88a",label:"500K - 1M"},{min:1000000,max:Infinity,color:"#00d4aa",label:"> 1M"}]},
+  access:{label:"Access score",metric:p=>p.access_score,format:v=>v+"/100",grades:[{min:0,max:45,color:"#3f1d1d",label:"< 45"},{min:45,max:60,color:"#7f1d1d",label:"45 - 60"},{min:60,max:75,color:"#b45309",label:"60 - 75"},{min:75,max:88,color:"#ca8a04",label:"75 - 88"},{min:88,max:Infinity,color:"#facc15",label:"> 88"}]}
+};
+let activeMode="tourists",gjLayer,currentBasemap,measuring=false,measureStart=null;
+const provinceLayers={},infoBody=document.getElementById("info-body"),statusEl=document.getElementById("map-status"),legendEl=document.getElementById("map-legend"),rankList=document.getElementById("rank-list"),provinceSearch=document.getElementById("province-search"),chart=document.getElementById("tourism-chart"),ctx=chart.getContext("2d");
+const lmap=L.map("leaflet-map",{center:[28.3,84.1],zoom:7,scrollWheelZoom:true,wheelPxPerZoomLevel:80});
+const basemaps={dark:L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{attribution:'&copy;<a href="https://openstreetmap.org/copyright">OSM</a> &copy;<a href="https://carto.com/">CARTO</a>',subdomains:"abcd",maxZoom:19}),terrain:L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",{attribution:"&copy; OpenTopoMap",maxZoom:17}),street:L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"&copy; OpenStreetMap",maxZoom:19})};
+currentBasemap=basemaps.dark.addTo(lmap);
+const hotspotsLayer=L.layerGroup(),routesLayer=L.layerGroup(),aqiLayer=L.layerGroup().addTo(lmap),measureLayer=L.layerGroup().addTo(lmap);
+const aqiStations=[
+  {id:"kathmandu",name:"Kathmandu",province:"Bagmati",lat:27.7172,lon:85.3240,fallback:134},
+  {id:"pokhara",name:"Pokhara",province:"Gandaki",lat:28.2096,lon:83.9856,fallback:72},
+  {id:"biratnagar",name:"Biratnagar",province:"Koshi",lat:26.4525,lon:87.2718,fallback:118},
+  {id:"janakpur",name:"Janakpur",province:"Madhesh",lat:26.7288,lon:85.9267,fallback:106},
+  {id:"bharatpur",name:"Bharatpur",province:"Bagmati",lat:27.6768,lon:84.4359,fallback:88},
+  {id:"butwal",name:"Butwal",province:"Lumbini",lat:27.7006,lon:83.4484,fallback:96},
+  {id:"nepalgunj",name:"Nepalgunj",province:"Lumbini",lat:28.0500,lon:81.6167,fallback:152},
+  {id:"birendranagar",name:"Birendranagar",province:"Karnali",lat:28.6019,lon:81.6339,fallback:64},
+  {id:"dhangadhi",name:"Dhangadhi",province:"Sudurpashchim",lat:28.6852,lon:80.6216,fallback:128}
 ];
-function getColor(v){return(GRADES.find(g=>v>=g.min&&v<g.max)||GRADES[0]).color;}
-const lmap=L.map('leaflet-map',{center:[28.3,84.1],zoom:7,scrollWheelZoom:false});
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'&copy;<a href="https://openstreetmap.org/copyright">OSM</a> &copy;<a href="https://carto.com/">CARTO</a>',subdomains:'abcd',maxZoom:19}).addTo(lmap);
-const infoBody=document.getElementById('info-body');
-function showInfo(p){infoBody.innerHTML=`<div class="info-province-name">${p.name}</div><div class="info-row"><span>Capital</span><span class="info-val">${p.capital}</span></div><div class="info-row"><span>Population</span><span class="info-val">${(p.population/1e6).toFixed(2)}M</span></div><div class="info-row"><span>Area</span><span class="info-val">${p.area_km2.toLocaleString()} km²</span></div><div class="info-row"><span>Tourists/yr</span><span class="info-val">${(p.tourist_arrivals/1000).toFixed(0)}K</span></div><div class="info-attraction">${p.main_attraction}</div>`;}
-function resetInfo(){infoBody.innerHTML='<p class="info-placeholder">Hover over a province to explore</p>';}
-let gjLayer;
-
-// Fetch high-fidelity boundaries dynamically from geoJSON-Nepal
-fetch('https://raw.githubusercontent.com/mesaugat/geoJSON-Nepal/master/nepal-states.geojson')
-  .then(res => res.json())
-  .then(geojson => {
-    geojson.features.forEach(feat => {
-      // ADM1_EN matches "1", "2", etc.
-      const pId = feat.properties.ADM1_EN;
-      const data = provinceData[pId];
-      if (data) {
-        Object.assign(feat.properties, data);
-      }
-    });
-
-    gjLayer=L.geoJSON(geojson,{
-      style:f=>({fillColor:getColor(f.properties.tourist_arrivals || 0),weight:1.5,opacity:1,color:'#1a4a3a',fillOpacity:.8}),
-      onEachFeature(feat,layer){
-        const p=feat.properties;
-        if (p && p.name) {
-          const displayName = p.name.replace(' Province', '');
-          layer.bindTooltip(displayName, {
-            permanent: true,
-            direction: 'center',
-            className: 'province-label'
-          });
-        }
-        layer.on({
-          mouseover(e){e.target.setStyle({weight:2.5,color:'#f59e0b',fillOpacity:.92});if(!L.Browser.ie&&!L.Browser.opera&&!L.Browser.edge)e.target.bringToFront();showInfo(p);},
-          mouseout(e){gjLayer.resetStyle(e.target);resetInfo();},
-          click(e){lmap.fitBounds(e.target.getBounds(),{padding:[50,50]});}
-        });
-      }
-    }).addTo(lmap);
-  })
-  .catch(err => {
-    console.error("GeoJSON load failed:", err);
-    infoBody.innerHTML = '<p class="info-placeholder" style="color:var(--pink)">Error loading high-fidelity boundary files.</p>';
-  });
-
-const legEl=document.getElementById('map-legend');
-GRADES.forEach(g=>{const d=document.createElement('div');d.className='legend-item';d.innerHTML=`<div class="legend-color" style="background:${g.color}"></div><span>${g.label}</span>`;legEl.appendChild(d);});
+const aqiCategories=[
+  {max:50,label:"Low",detail:"Good",color:"#22c55e"},
+  {max:100,label:"Less polluted",detail:"Moderate",color:"#facc15"},
+  {max:150,label:"Polluted",detail:"Unhealthy SG",color:"#f97316"},
+  {max:200,label:"Highly polluted",detail:"Unhealthy",color:"#ef4444"},
+  {max:300,label:"Very high",detail:"Very unhealthy",color:"#a855f7"},
+  {max:500,label:"Hazardous",detail:"Hazardous",color:"#7f1d1d"}
+];
+const aqiReadings=new Map();
+function cfg(){return layerModes[activeMode]}
+function metric(p){return cfg().metric(p)}
+function color(v){return(cfg().grades.find(g=>v>=g.min&&v<g.max)||cfg().grades[0]).color}
+function styleFeature(f){const p=f.properties;return{fillColor:p&&p.name?color(metric(p)):"#111827",weight:1.5,opacity:1,color:"#1a4a3a",fillOpacity:.82}}
+function showInfo(p){infoBody.innerHTML=`<div class="info-province-name">${p.name}</div><div class="info-row"><span>Capital</span><span class="info-val">${p.capital}</span></div><div class="info-row"><span>Population</span><span class="info-val">${(p.population/1e6).toFixed(2)}M</span></div><div class="info-row"><span>Area</span><span class="info-val">${p.area_km2.toLocaleString()} km2</span></div><div class="info-row"><span>${cfg().label}</span><span class="info-val">${cfg().format(metric(p))}</span></div><div class="info-attraction">${p.main_attraction}</div>`}
+function resetInfo(){infoBody.innerHTML='<p class="info-placeholder">Hover over a province to explore</p>'}
+function updateLegend(){legendEl.innerHTML=`<div class="legend-title">${cfg().label}</div>`;cfg().grades.forEach(g=>{const item=document.createElement("div");item.className="legend-item";item.innerHTML=`<div class="legend-color" style="background:${g.color}"></div><span>${g.label}</span>`;legendEl.appendChild(item)})}
+function updateRankings(){const rows=Object.values(provinceData).sort((a,b)=>metric(b)-metric(a)),max=metric(rows[0]);document.getElementById("active-layer-label").textContent=cfg().label;rankList.innerHTML=rows.map(p=>`<div class="rank-item"><div class="rank-name">${p.name.replace(" Province","")}</div><div class="rank-track"><div class="rank-fill" style="width:${Math.max(5,metric(p)/max*100)}%"></div></div><div class="rank-value">${cfg().format(metric(p))}</div></div>`).join("");drawChart(rows)}
+function drawChart(rows){const dpr=window.devicePixelRatio||1,w=chart.clientWidth||520,h=240,pad=28;chart.width=w*dpr;chart.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);const max=Math.max(...rows.map(metric)),slot=(w-pad*2)/rows.length,barW=slot*.62;rows.forEach((p,i)=>{const x=pad+i*slot+slot*.19,bh=(h-70)*(metric(p)/max),y=h-42-bh,grad=ctx.createLinearGradient(0,y,0,h-42);grad.addColorStop(0,"#00d4aa");grad.addColorStop(1,"#7c4dff");ctx.fillStyle=grad;ctx.fillRect(x,y,barW,bh);ctx.fillStyle="rgba(226,232,240,.72)";ctx.font="10px Inter";ctx.textAlign="center";ctx.fillText(p.name.replace(" Province","").slice(0,8),x+barW/2,h-22)});ctx.fillStyle="rgba(100,116,139,.9)";ctx.font="11px Space Mono";ctx.textAlign="left";ctx.fillText(cfg().label,pad,15)}
+function getProvinceId(props){const raw=String(props.ADM1_EN||props.STATE_CODE||props.Province||props.province||props.ADM1||props.name||"").trim(),found=raw.match(/[1-7]/);if(found)return found[0];const key=raw.toLowerCase();return Object.entries(provinceData).find(([,p])=>key.includes(p.name.toLowerCase().replace(" province","")))?.[0]||""}
+function changeMode(mode){activeMode=mode;document.querySelectorAll("[data-layer-mode]").forEach(b=>b.classList.toggle("active",b.dataset.layerMode===mode));if(gjLayer)gjLayer.setStyle(styleFeature);updateLegend();updateRankings();statusEl.textContent=cfg().label+" layer active"}
+function measureClick(e){if(!measuring)return;if(!measureStart){measureStart=e.latlng;measureLayer.clearLayers();L.circleMarker(measureStart,{radius:5,color:"#ffb300",fillColor:"#ffb300",fillOpacity:1}).addTo(measureLayer);statusEl.textContent="Choose second point";return}const km=measureStart.distanceTo(e.latlng)/1000;L.polyline([measureStart,e.latlng],{color:"#ffb300",weight:3}).addTo(measureLayer);L.circleMarker(e.latlng,{radius:5,color:"#ffb300",fillColor:"#ffb300",fillOpacity:1}).addTo(measureLayer);L.popup().setLatLng(e.latlng).setContent(`<strong>${km.toFixed(1)} km</strong>`).openOn(lmap);statusEl.textContent="Measured "+km.toFixed(1)+" km";measureStart=null}
+function aqiCategory(v){return aqiCategories.find(c=>v<=c.max)||aqiCategories[aqiCategories.length-1]}
+function aqiEndpoint(s){return `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${s.lat}&longitude=${s.lon}&current=us_aqi,pm10,pm2_5&timezone=auto`}
+function fallbackAQI(){aqiStations.forEach(s=>aqiReadings.set(s.id,{...s,aqi:s.fallback,pm25:null,pm10:null,time:"demo baseline"}));renderAQI("AQI baseline loaded")}
+function renderAQI(message){
+  aqiLayer.clearLayers();
+  const rows=[...aqiReadings.values()].sort((a,b)=>b.aqi-a.aqi);
+  document.getElementById("aqi-zone-list").innerHTML=rows.map(r=>{const c=aqiCategory(r.aqi);return `<div class="aqi-zone-row"><div><div class="aqi-zone-city">${r.name}</div><div class="aqi-zone-meta">${r.province} - ${c.label}</div></div><div class="aqi-zone-value" style="background:${c.color}">${r.aqi}</div></div>`}).join("");
+  document.getElementById("aqi-legend-grid").innerHTML=aqiCategories.map(c=>`<div class="aqi-legend-chip" style="background:${c.color}">${c.label}<br>${c.max===500?"301+":c.max}</div>`).join("");
+  rows.forEach(r=>{const c=aqiCategory(r.aqi),html=`<div class="aqi-zone-marker" style="background:${c.color}">${r.aqi}</div>`;L.marker([r.lat,r.lon],{icon:L.divIcon({className:"",html,iconSize:[38,38],iconAnchor:[19,19]})}).bindPopup(`<strong>${r.name}</strong><br>${r.province}<br>AQI: <strong>${r.aqi}</strong> - ${c.label}<br>PM2.5: ${r.pm25??"n/a"} ug/m3<br>PM10: ${r.pm10??"n/a"} ug/m3`).addTo(aqiLayer)});
+  document.getElementById("aqi-updated").textContent=message||"AQI zones";
+}
+async function loadAQI(){
+  document.getElementById("aqi-updated").textContent="Loading";
+  try{
+    const data=await Promise.all(aqiStations.map(async s=>{const json=await fetch(aqiEndpoint(s)).then(r=>{if(!r.ok)throw new Error("AQI request failed");return r.json()});const c=json.current||{};return {...s,aqi:Math.round(c.us_aqi||s.fallback),pm25:c.pm2_5,pm10:c.pm10,time:c.time}}));
+    data.forEach(d=>aqiReadings.set(d.id,d));
+    const stamp=data[0]?.time?new Date(data[0].time).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}):"Live";
+    renderAQI("Updated "+stamp);
+    statusEl.textContent="AQI zones updated";
+  }catch(err){
+    console.error(err);
+    if(!aqiReadings.size)fallbackAQI();else renderAQI("AQI offline");
+    statusEl.textContent="AQI service unavailable - showing saved zone values";
+  }
+}
+[{name:"Kathmandu Valley",type:"Heritage gateway",coords:[27.7172,85.324]},{name:"Pokhara",type:"Lake and adventure hub",coords:[28.2096,83.9856]},{name:"Everest Base Camp",type:"High mountain trek",coords:[28.0026,86.8528]},{name:"Lumbini",type:"Buddhist pilgrimage",coords:[27.6792,83.507]},{name:"Chitwan National Park",type:"Wildlife tourism",coords:[27.5291,84.3542]},{name:"Janakpur",type:"Cultural pilgrimage",coords:[26.7288,85.9267]},{name:"Rara Lake",type:"Remote nature destination",coords:[29.5297,82.0814]},{name:"Ilam Tea Gardens",type:"Hill landscape tourism",coords:[26.911,87.9237]},{name:"Shuklaphanta NP",type:"Far-west wildlife corridor",coords:[28.8372,80.196]}].forEach(h=>L.marker(h.coords,{icon:L.divIcon({className:"",html:'<div class="hotspot-marker">+</div>',iconSize:[26,26],iconAnchor:[13,13]})}).bindPopup(`<strong>${h.name}</strong><br><span style="color:#94a3b8">${h.type}</span>`).addTo(hotspotsLayer));
+const circuits=[{id:"heritage",name:"Heritage Spine",detail:"Kathmandu - Janakpur - Lumbini",color:"#ffb300",points:[[27.7172,85.324],[26.7288,85.9267],[27.6792,83.507]]},{id:"himalaya",name:"Himalayan Adventure",detail:"Kathmandu - Pokhara - Everest",color:"#00d4aa",points:[[27.7172,85.324],[28.2096,83.9856],[28.0026,86.8528]]},{id:"western",name:"Western Discovery",detail:"Pokhara - Rara - Shuklaphanta",color:"#7c4dff",points:[[28.2096,83.9856],[29.5297,82.0814],[28.8372,80.196]]}];
+document.getElementById("circuit-grid").innerHTML=circuits.map(c=>`<div class="circuit-card" data-circuit="${c.id}"><h3>${c.name}</h3><p>${c.detail}</p></div>`).join("");
+circuits.forEach(c=>L.polyline(c.points,{color:c.color,weight:4,opacity:.88,dashArray:"8 8"}).bindPopup(`<strong>${c.name}</strong><br>${c.detail}`).addTo(routesLayer));
+document.querySelectorAll(".circuit-card").forEach(card=>card.addEventListener("click",()=>{document.querySelectorAll(".circuit-card").forEach(c=>c.classList.remove("active"));card.classList.add("active");const c=circuits.find(x=>x.id===card.dataset.circuit);if(!lmap.hasLayer(routesLayer))routesLayer.addTo(lmap);document.getElementById("toggle-routes").classList.add("active");lmap.fitBounds(L.latLngBounds(c.points),{padding:[70,70]});statusEl.textContent=c.name+" selected"}));
+fetch("https://raw.githubusercontent.com/mesaugat/geoJSON-Nepal/master/nepal-states.geojson").then(r=>r.json()).then(geojson=>{geojson.features.forEach(f=>{const id=getProvinceId(f.properties),data=provinceData[id];if(data)Object.assign(f.properties,{province_id:id},data)});gjLayer=L.geoJSON(geojson,{style:styleFeature,onEachFeature(f,layer){const p=f.properties;if(p&&p.name){provinceLayers[p.province_id]=layer;const label=p.name.replace(" Province","");provinceSearch.insertAdjacentHTML("beforeend",`<option value="${p.province_id}">${label}</option>`);layer.bindTooltip(label,{permanent:true,direction:"center",className:"province-label"});layer.on({mouseover(e){e.target.setStyle({weight:2.5,color:"#f59e0b",fillOpacity:.92});if(!L.Browser.ie&&!L.Browser.opera&&!L.Browser.edge)e.target.bringToFront();showInfo(p)},mouseout(e){gjLayer.resetStyle(e.target);resetInfo()},click(e){if(measuring)return;lmap.fitBounds(e.target.getBounds(),{padding:[50,50]});showInfo(p)}})}}}).addTo(lmap)}).catch(()=>{infoBody.innerHTML='<p class="info-placeholder" style="color:var(--pink)">Error loading boundary files. Check your internet connection.</p>'});
+document.querySelectorAll("[data-layer-mode]").forEach(btn=>btn.addEventListener("click",()=>changeMode(btn.dataset.layerMode)));
+document.getElementById("basemap-select").addEventListener("change",e=>{lmap.removeLayer(currentBasemap);currentBasemap=basemaps[e.target.value].addTo(lmap);currentBasemap.bringToBack();statusEl.textContent=e.target.options[e.target.selectedIndex].text+" basemap active"});
+provinceSearch.addEventListener("change",e=>{const layer=provinceLayers[e.target.value];if(layer){lmap.fitBounds(layer.getBounds(),{padding:[55,55]});showInfo(layer.feature.properties);statusEl.textContent="Focused "+layer.feature.properties.name}});
+document.getElementById("toggle-hotspots").addEventListener("click",e=>{const on=lmap.hasLayer(hotspotsLayer);on?lmap.removeLayer(hotspotsLayer):hotspotsLayer.addTo(lmap);e.target.classList.toggle("active",!on);statusEl.textContent=!on?"Destination hotspots visible":"Destination hotspots hidden"});
+document.getElementById("toggle-aqi").addEventListener("click",e=>{const on=lmap.hasLayer(aqiLayer);on?lmap.removeLayer(aqiLayer):aqiLayer.addTo(lmap);e.target.classList.toggle("active",!on);statusEl.textContent=!on?"AQI pollution zones visible":"AQI pollution zones hidden"});
+document.getElementById("toggle-routes").addEventListener("click",e=>{const on=lmap.hasLayer(routesLayer);on?lmap.removeLayer(routesLayer):routesLayer.addTo(lmap);e.target.classList.toggle("active",!on);statusEl.textContent=!on?"Tourism circuits visible":"Tourism circuits hidden"});
+document.getElementById("measure-btn").addEventListener("click",e=>{measuring=!measuring;measureStart=null;e.target.classList.toggle("active",measuring);statusEl.textContent=measuring?"Choose first point":"Measurement off"});
+document.getElementById("reset-map").addEventListener("click",()=>{lmap.setView([28.3,84.1],7);measureLayer.clearLayers();measureStart=null;resetInfo();statusEl.textContent="Map reset"});
+document.getElementById("refresh-aqi").addEventListener("click",loadAQI);
+document.getElementById("fit-aqi").addEventListener("click",()=>{lmap.fitBounds(aqiStations.map(s=>[s.lat,s.lon]),{padding:[55,55]});statusEl.textContent="Focused AQI city zones"});
+lmap.on("click",measureClick);
+window.addEventListener("resize",updateRankings);
+updateLegend();
+updateRankings();
+fallbackAQI();
+loadAQI();
 </script>
 </body>
 </html>
